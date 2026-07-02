@@ -1,0 +1,20 @@
+{
+  "startup": {
+    "coldStartTargetMs": 3000,
+    "warmStartTargetMs": 1000,
+    "extensionActivationTimeoutMs": 200
+  },
+  "memory": {
+    "idleTargetMB": 500,
+    "cacheMaxSizeMB": 100
+  },
+  "completion": {
+    "latencyTargetMs": 100,
+    "debounceMs": 300,
+    "cacheSize": 50
+  },
+  "chat": {
+    "firstTokenTargetMs": 2000,
+    "streamBufferSize": 1024
+  }
+}

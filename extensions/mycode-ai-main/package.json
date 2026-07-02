@@ -1,0 +1,167 @@
+{
+  "name": "mycode-ai-main",
+  "displayName": "MyCode AI",
+  "description": "MyCode AI - AI-powered code editor core extension",
+  "version": "1.0.0",
+  "publisher": "mycode-ai",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mycode-ai.openChat",
+        "title": "MyCode AI: Open Chat",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.openAgent",
+        "title": "MyCode AI: Open Agent",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.codeReview",
+        "title": "MyCode AI: Code Review Current File",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.semanticSearch",
+        "title": "MyCode AI: Semantic Search",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.refactor",
+        "title": "MyCode AI: AI Refactor",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.debug.analyzeError",
+        "title": "MyCode AI: Analyze Current Error",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.showWelcome",
+        "title": "MyCode AI: Show Welcome Page",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.toggleTheme",
+        "title": "MyCode AI: Toggle Theme (Dark/Light)",
+        "category": "MyCode AI"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "mycode-ai.openChat",
+        "key": "ctrl+shift+i",
+        "mac": "cmd+shift+i"
+      },
+      {
+        "command": "mycode-ai.openAgent",
+        "key": "ctrl+shift+u",
+        "mac": "cmd+shift+u"
+      },
+      {
+        "command": "mycode-ai.semanticSearch",
+        "key": "ctrl+shift+;",
+        "mac": "cmd+shift+;"
+      }
+    ],
+    "configuration": {
+      "title": "MyCode AI",
+      "properties": {
+        "mycode-ai.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "API key for AI services",
+          "scope": "application"
+        },
+        "mycode-ai.baseUrl": {
+          "type": "string",
+          "default": "https://api.openai.com/v1",
+          "description": "Base URL for AI API",
+          "scope": "application"
+        },
+        "mycode-ai.defaultModel": {
+          "type": "string",
+          "default": "gpt-4o",
+          "description": "Default AI model to use",
+          "scope": "application"
+        },
+        "mycode-ai.temperature": {
+          "type": "number",
+          "default": 0.7,
+          "minimum": 0,
+          "maximum": 2,
+          "description": "Sampling temperature",
+          "scope": "application"
+        },
+        "mycode-ai.maxTokens": {
+          "type": "number",
+          "default": 4096,
+          "description": "Maximum tokens per response",
+          "scope": "application"
+        },
+        "mycode-ai.theme": {
+          "type": "string",
+          "enum": [
+            "dark",
+            "light",
+            "system"
+          ],
+          "default": "dark",
+          "description": "MyCode AI theme preference",
+          "scope": "application"
+        },
+        "mycode-ai.completion.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable AI code completion",
+          "scope": "application"
+        },
+        "mycode-ai.completion.debounce": {
+          "type": "number",
+          "default": 150,
+          "description": "Completion debounce delay in ms",
+          "scope": "application"
+        },
+        "mycode-ai.agent.autoConfirm": {
+          "type": "boolean",
+          "default": false,
+          "description": "Auto-confirm agent tool calls",
+          "scope": "application"
+        },
+        "mycode-ai.agent.maxSteps": {
+          "type": "number",
+          "default": 50,
+          "description": "Maximum agent execution steps",
+          "scope": "application"
+        }
+      }
+    },
+    "viewsWelcome": [
+      {
+        "view": "mycode-ai-chat",
+        "contents": "Welcome to MyCode AI\n[Start Chatting](command:mycode-ai.openChat)"
+      }
+    ]
+  },
+  "dependencies": {
+    "vscode": "^1.1.37"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.95.0",
+    "typescript": "^5.4.0"
+  },
+  "scripts": {
+    "compile": "tsc -p tsconfig.json",
+    "watch": "tsc -watch -p tsconfig.json"
+  }
+}

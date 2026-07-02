@@ -1,0 +1,63 @@
+{
+  "name": "mycode-ai-completion",
+  "displayName": "MyCode AI Completion",
+  "description": "AI code completion and inline editing",
+  "version": "1.0.0",
+  "publisher": "mycode-ai",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "AI"
+  ],
+  "activationEvents": [
+    "onLanguage:*"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "completionProviders": [
+      {
+        "language": "*",
+        "providerId": "mycode-ai-completion"
+      }
+    ],
+    "codeActions": [
+      {
+        "languages": [
+          "*"
+        ],
+        "kind": "quickfix"
+      }
+    ],
+    "commands": [
+      {
+        "command": "mycode-ai-completion.toggle",
+        "title": "Toggle AI Completion",
+        "category": "MyCode AI"
+      }
+    ],
+    "configuration": {
+      "title": "MyCode AI Completion",
+      "properties": {
+        "mycode-ai.completion.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable AI code completion"
+        },
+        "mycode-ai.completion.debounce": {
+          "type": "number",
+          "default": 150,
+          "description": "Debounce delay in milliseconds"
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.95.0",
+    "typescript": "^5.4.0"
+  },
+  "scripts": {
+    "compile": "tsc -p tsconfig.json",
+    "watch": "tsc -watch -p tsconfig.json"
+  }
+}

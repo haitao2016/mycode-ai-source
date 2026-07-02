@@ -1,0 +1,36 @@
+{
+  "name": "mycode-ai-theme",
+  "displayName": "MyCode AI Theme",
+  "description": "Official MyCode AI theme - Dark and Light",
+  "version": "1.0.0",
+  "publisher": "mycode-ai",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "MyCode AI Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/mycode-ai-dark-color-theme.json"
+      },
+      {
+        "label": "MyCode AI Light",
+        "uiTheme": "vs",
+        "path": "./themes/mycode-ai-light-color-theme.json"
+      }
+    ]
+  },
+  "keywords": [
+    "theme",
+    "dark",
+    "light",
+    "mycode-ai"
+  ],
+  "activationEvents": [
+    "*"
+  ]
+}

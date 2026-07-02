@@ -1,0 +1,24 @@
+{
+  "recommendations": [
+    "pkief.material-icon-theme",
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "ms-python.python",
+    "ms-vscode.cpptools",
+    "ms-azuretools.vscode-docker",
+    "humao.rest-client"
+  ],
+  "unwantedRecommendations": [],
+  "mycodeAiBuiltin": [
+    "mycode-ai-main",
+    "mycode-ai-chat",
+    "mycode-ai-agent",
+    "mycode-ai-completion",
+    "mycode-ai-review",
+    "mycode-ai-search",
+    "mycode-ai-refactor",
+    "mycode-ai-debug",
+    "mycode-ai-theme"
+  ]
+}

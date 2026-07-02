@@ -1,0 +1,58 @@
+{
+  "name": "mycode-ai-chat",
+  "displayName": "MyCode AI Chat",
+  "description": "AI chat sidebar for MyCode AI",
+  "version": "1.0.0",
+  "publisher": "mycode-ai",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "AI"
+  ],
+  "activationEvents": [
+    "onCommand:mycode-ai-chat.open",
+    "onView:mycode-ai-chat.view"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "mycode-ai",
+          "title": "MyCode AI",
+          "icon": "$(sparkle)"
+        }
+      ]
+    },
+    "views": {
+      "mycode-ai": [
+        {
+          "id": "mycode-ai-chat",
+          "name": "AI Chat",
+          "type": "webview"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "mycode-ai-chat.newConversation",
+        "title": "New Conversation",
+        "category": "MyCode AI Chat"
+      },
+      {
+        "command": "mycode-ai-chat.clearHistory",
+        "title": "Clear Chat History",
+        "category": "MyCode AI Chat"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.95.0",
+    "typescript": "^5.4.0"
+  },
+  "scripts": {
+    "compile": "tsc -p tsconfig.json",
+    "watch": "tsc -watch -p tsconfig.json"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "mycode-ai-debug",
+  "displayName": "MyCode AI Debug Assistant",
+  "description": "AI-powered debugging assistant",
+  "version": "1.0.0",
+  "publisher": "mycode-ai",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "AI"
+  ],
+  "activationEvents": [
+    "onDebug"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mycode-ai-debug.analyzeError",
+        "title": "Analyze Current Error",
+        "category": "MyCode AI Debug",
+        "icon": "$(bug)"
+      },
+      {
+        "command": "mycode-ai-debug.explainStackTrace",
+        "title": "Explain Stack Trace",
+        "category": "MyCode AI Debug"
+      },
+      {
+        "command": "mycode-ai-debug.suggestFix",
+        "title": "Suggest Fix",
+        "category": "MyCode AI Debug"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "mycode-ai-debug",
+        "label": "AI Debug Assistant"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.95.0",
+    "typescript": "^5.4.0"
+  },
+  "scripts": {
+    "compile": "tsc -p tsconfig.json",
+    "watch": "tsc -watch -p tsconfig.json"
+  }
+}

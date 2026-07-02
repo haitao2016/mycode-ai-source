@@ -1,0 +1,116 @@
+{
+  "appId": "com.mycode.ai",
+  "productName": "MyCode-AI",
+  "directories": {
+    "output": "dist/release",
+    "buildResources": "branding"
+  },
+  "files": [
+    "code-oss/**/*",
+    "!code-oss/**/*.map",
+    "!code-oss/**/node_modules/**/*.md",
+    "!code-oss/**/node_modules/**/*.txt"
+  ],
+  "extraResources": [
+    {
+      "from": "branding",
+      "to": "branding"
+    },
+    {
+      "from": "dist/extensions",
+      "to": "extensions"
+    }
+  ],
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      },
+      {
+        "target": "zip",
+        "arch": ["x64"]
+      }
+    ],
+    "icon": "branding/icons/icon.ico",
+    "artifactName": "MyCode-AI-Setup-${version}.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "MyCode-AI"
+  },
+  "mac": {
+    "target": [
+      {
+        "target": "dmg",
+        "arch": ["x64", "arm64"]
+      },
+      {
+        "target": "zip",
+        "arch": ["x64", "arm64"]
+      }
+    ],
+    "icon": "branding/icons/icon.icns",
+    "category": "public.app-category.developer-tools",
+    "hardenedRuntime": true,
+    "gatekeeperAssess": false,
+    "entitlements": "branding/entitlements.mac.plist",
+    "entitlementsInherit": "branding/entitlements.mac.plist"
+  },
+  "dmg": {
+    "contents": [
+      {
+        "x": 130,
+        "y": 220
+      },
+      {
+        "x": 410,
+        "y": 220,
+        "type": "link",
+        "path": "/Applications"
+      }
+    ]
+  },
+  "linux": {
+    "target": [
+      {
+        "target": "deb",
+        "arch": ["x64", "arm64"]
+      },
+      {
+        "target": "rpm",
+        "arch": ["x64", "arm64"]
+      },
+      {
+        "target": "AppImage",
+        "arch": ["x64"]
+      }
+    ],
+    "icon": "branding/icons/png",
+    "category": "Development",
+    "synopsis": "MyCode-AI - AI-Powered Code Editor",
+    "description": "MyCode-AI is an AI-powered code editor built on Code-OSS with integrated AI features including chat, agent mode, code completion, code review, semantic search, and refactoring assistance."
+  },
+  "deb": {
+    "depends": [
+      "libgtk-3-0",
+      "libnotify4",
+      "libnss3",
+      "libxss1",
+      "libxtst6",
+      "xdg-utils",
+      "libatspi2.0-0",
+      "libuuid1",
+      "libsecret-1-0"
+    ]
+  },
+  "publish": {
+    "provider": "generic",
+    "url": "https://releases.mycode.ai/${version}"
+  },
+  "electronVersion": "30.0.0",
+  "nodeVersion": "20.18.0"
+}

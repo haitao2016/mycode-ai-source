@@ -1,0 +1,64 @@
+{
+  "name": "mycode-ai-refactor",
+  "displayName": "MyCode AI Refactor",
+  "description": "AI-powered code refactoring assistant",
+  "version": "1.0.0",
+  "publisher": "mycode-ai",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "AI"
+  ],
+  "activationEvents": [
+    "onLanguage:*"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "codeActions": [
+      {
+        "languages": [
+          "*"
+        ],
+        "kind": "refactor"
+      },
+      {
+        "languages": [
+          "*"
+        ],
+        "kind": "refactor.extract"
+      },
+      {
+        "languages": [
+          "*"
+        ],
+        "kind": "source"
+      }
+    ],
+    "commands": [
+      {
+        "command": "mycode-ai-refactor.explain",
+        "title": "Explain Code",
+        "category": "MyCode AI Refactor"
+      },
+      {
+        "command": "mycode-ai-refactor.generateTests",
+        "title": "Generate Tests",
+        "category": "MyCode AI Refactor"
+      },
+      {
+        "command": "mycode-ai-refactor.addComments",
+        "title": "Add Comments",
+        "category": "MyCode AI Refactor"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.95.0",
+    "typescript": "^5.4.0"
+  },
+  "scripts": {
+    "compile": "tsc -p tsconfig.json",
+    "watch": "tsc -watch -p tsconfig.json"
+  }
+}
