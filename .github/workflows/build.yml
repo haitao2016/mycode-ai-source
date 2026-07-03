@@ -1,0 +1,244 @@
+name: Build MyCode-AI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  release:
+    types: [created]
+
+env:
+  ELECTRON_MIRROR: https://npmmirror.com/mirrors/electron/
+  ELECTRON_CUSTOM_DIR: {{ version }}
+
+jobs:
+  build-extensions:
+    name: Build Extensions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: 'extensions/**/package-lock.json'
+
+      - name: Build All Extensions
+        run: |
+          for dir in extensions/*/; do
+            if [ -f "$dir/package.json" ]; then
+              echo "Building ${dir}..."
+              cd "$dir" && npm install && npm run compile
+              cd -
+            fi
+          done
+        working-directory: ${{ github.workspace }}
+
+      - name: Package Extensions
+        run: node scripts/package-extensions.js
+        working-directory: ${{ github.workspace }}
+
+      - name: Upload Extension Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mycode-ai-extensions
+          path: dist/extensions/*.vsix
+
+  compile-code-oss:
+    name: Compile Code-OSS (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.18.0'
+
+      - name: Cache Code-OSS Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            code-oss/node_modules
+            code-oss/build/node_modules
+            code-oss/extensions/node_modules
+          key: ${{ runner.os }}-code-oss-deps-${{ hashFiles('code-oss/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-code-oss-deps-
+
+      - name: Install Dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxkbfile-dev libsecret-1-dev libnss3 libgtk-3-0 libxss1 libasound2
+
+      - name: Install Dependencies (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          brew install pkg-config cairo pango libpng jpeg giflib librsvg
+
+      - name: Configure NPM Registry (Linux/macOS)
+        if: matrix.os != 'windows-latest'
+        run: npm config set registry https://registry.npmmirror.com
+
+      - name: Configure NPM Registry (Windows)
+        if: matrix.os == 'windows-latest'
+        run: npm config set registry https://registry.npmmirror.com
+
+      - name: Create .npmrc Files
+        run: |
+          echo 'target="32.2.1"' > .npmrc
+          echo 'ms_build_id="1"' >> .npmrc
+          mkdir -p remote
+          echo 'target="20.18.0"' > remote/.npmrc
+          echo 'ms_build_id="1"' >> remote/.npmrc
+        working-directory: ${{ github.workspace }}/code-oss
+
+      - name: Install Code-OSS Dependencies
+        run: npm install --ignore-scripts --legacy-peer-deps
+        working-directory: ${{ github.workspace }}/code-oss
+
+      - name: Install Build Dependencies
+        run: npm install --ignore-scripts --legacy-peer-deps
+        working-directory: ${{ github.workspace }}/code-oss/build
+
+      - name: Install Extensions Dependencies
+        run: npm install --ignore-scripts --legacy-peer-deps
+        working-directory: ${{ github.workspace }}/code-oss/extensions
+
+      - name: Install Native Dependencies
+        run: npm install
+        working-directory: ${{ github.workspace }}/code-oss
+
+      - name: Compile Code-OSS
+        run: NODE_OPTIONS="--max-old-space-size=8192" npm run compile
+        working-directory: ${{ github.workspace }}/code-oss
+
+      - name: Inject MyCode-AI Extensions
+        run: node scripts/inject-into-code-oss.js
+        working-directory: ${{ github.workspace }}
+
+      - name: Upload Compiled Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-oss-${{ runner.os }}
+          path: |
+            code-oss/out/**
+            code-oss/extensions/mycode-ai-*/**
+
+  package-release:
+    name: Package Release (${{ matrix.os }})
+    needs: [compile-code-oss]
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.18.0'
+
+      - name: Download Compiled Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: code-oss-${{ runner.os }}
+          path: code-oss
+
+      - name: Install Dependencies
+        run: npm install --ignore-scripts --legacy-peer-deps
+        working-directory: ${{ github.workspace }}/code-oss
+
+      - name: Install Native Dependencies
+        run: npm install
+        working-directory: ${{ github.workspace }}/code-oss
+
+      - name: Package Windows
+        if: matrix.os == 'windows-latest'
+        run: |
+          npm run gulp -- vscode-win32-x64
+          npm run gulp -- vscode-win32-x64-archive
+        working-directory: ${{ github.workspace }}/code-oss
+
+      - name: Package Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          npm run gulp -- vscode-linux-x64
+          npm run gulp -- vscode-linux-x64-archive
+        working-directory: ${{ github.workspace }}/code-oss
+
+      - name: Package macOS
+        if: matrix.os == 'macos-latest'
+        run: |
+          npm run gulp -- vscode-darwin-x64
+          npm run gulp -- vscode-darwin-x64-archive
+        working-directory: ${{ github.workspace }}/code-oss
+
+      - name: Upload Release Assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ runner.os }}
+          path: |
+            code-oss/.build/electron/**/*.exe
+            code-oss/.build/electron/**/*.zip
+            code-oss/.build/electron/**/*.tar.gz
+            code-oss/.build/electron/**/*.dmg
+
+  publish-release:
+    name: Publish Release
+    needs: package-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Release Assets
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+
+      - name: List Assets
+        run: find release-assets -type f
+
+      - name: Upload Assets to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release-assets/**/*.exe
+            release-assets/**/*.zip
+            release-assets/**/*.tar.gz
+            release-assets/**/*.dmg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Install Dependencies
+        run: npm install
+        working-directory: ${{ github.workspace }}/extensions/mycode-ai-main
+
+      - name: Run ESLint
+        run: npm run lint
+        working-directory: ${{ github.workspace }}/extensions/mycode-ai-main
