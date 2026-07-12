@@ -1,0 +1,70 @@
+{
+  "name": "mycode-ai-agent",
+  "displayName": "MyCode AI Agent",
+  "description": "AI-powered Agent mode for MyCode - automate coding tasks with intelligent agents",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": ["AI", "Agent"],
+  "activationEvents": ["onCommand:mycode-ai.agent.start", "onView:mycode-ai.agent"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "views": {
+      "activitybar": [
+        {
+          "id": "mycode-ai.agent",
+          "name": "AI Agent",
+          "icon": "$(bot)",
+          "type": "webview"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "mycode-ai.agent.start",
+        "title": "Start Agent Mode",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.agent.stop",
+        "title": "Stop Agent",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.agent.runTask",
+        "title": "Run Task",
+        "category": "MyCode AI"
+      }
+    ],
+    "configuration": {
+      "title": "MyCode AI Agent",
+      "properties": {
+        "mycode-ai.agent.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable AI Agent mode"
+        },
+        "mycode-ai.agent.maxIterations": {
+          "type": "number",
+          "default": 50,
+          "description": "Maximum iterations per task"
+        },
+        "mycode-ai.agent.autoSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Auto-save files modified by agent"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -p ./ --watch",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

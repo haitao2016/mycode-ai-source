@@ -1,0 +1,123 @@
+{
+  "name": "mycode-ai-main",
+  "displayName": "MyCode AI Main Extension",
+  "description": "Core extension for MyCode AI - provides AI chat, Agent mode, code completion, and semantic search",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "AI",
+    "Chat",
+    "Extension Packs"
+  ],
+  "activationEvents": [
+    "*",
+    "onCommand:mycode-ai.openChat",
+    "onCommand:mycode-ai.openAgent",
+    "onCommand:mycode-ai.codeComplete",
+    "onView:mycode-ai.chatView"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mycode-ai.openChat",
+        "title": "Open AI Chat",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.openAgent",
+        "title": "Open Agent Mode",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.codeComplete",
+        "title": "AI Code Complete",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.codeReview",
+        "title": "AI Code Review",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.semanticSearch",
+        "title": "Semantic Search",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.refactor",
+        "title": "AI Refactor",
+        "category": "MyCode AI"
+      }
+    ],
+    "views": {
+      "activitybar": [
+        {
+          "id": "mycode-ai.chatView",
+          "name": "AI Chat",
+          "icon": "$(message-square)",
+          "type": "webview"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "MyCode AI",
+      "properties": {
+        "mycode-ai.provider": {
+          "type": "string",
+          "default": "openai",
+          "description": "AI Provider (openai, anthropic, deepseek, qwen)"
+        },
+        "mycode-ai.model": {
+          "type": "string",
+          "default": "gpt-4o",
+          "description": "AI Model"
+        },
+        "mycode-ai.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "API Key",
+          "scope": "application"
+        },
+        "mycode-ai.baseUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Custom API Base URL"
+        },
+        "mycode-ai.completionEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable AI Code Completion"
+        },
+        "mycode-ai.completionDelay": {
+          "type": "number",
+          "default": 100,
+          "description": "Completion delay in milliseconds"
+        }
+      }
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "mycode-ai.codeReview",
+          "group": "MyCode AI@1"
+        },
+        {
+          "command": "mycode-ai.refactor",
+          "group": "MyCode AI@2"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -p ./ --watch",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

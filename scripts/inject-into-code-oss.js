@@ -33,14 +33,73 @@ function copyDir(src, dest) {
 function injectBranding() {
   const productJsonPath = path.join(CODE_OSS_DIR, 'product.json');
   const brandingPath = path.join(__dirname, '..', '..', 'branding', 'product.json');
+  const backupPath = productJsonPath + '.backup';
   
-  if (fs.existsSync(brandingPath) && fs.existsSync(productJsonPath)) {
-    const branding = JSON.parse(fs.readFileSync(brandingPath, 'utf-8'));
-    const product = JSON.parse(fs.readFileSync(productJsonPath, 'utf-8'));
+  if (!fs.existsSync(brandingPath)) {
+    console.log('⚠ Branding file not found, skipping branding injection');
+    console.log('  Expected path:', brandingPath);
+    return true;
+  }
+  
+  if (!fs.existsSync(productJsonPath)) {
+    console.log('⚠ Product.json file not found in Code-OSS directory, skipping branding injection');
+    console.log('  Expected path:', productJsonPath);
+    return true;
+  }
+  
+  try {
+    if (fs.existsSync(backupPath)) {
+      fs.unlinkSync(backupPath);
+    }
     
-    Object.assign(product, branding);
-    fs.writeFileSync(productJsonPath, JSON.stringify(product, null, 2));
-    console.log('✓ Branding injected');
+    fs.copyFileSync(productJsonPath, backupPath);
+    console.log('✓ Backup created');
+    
+    let branding;
+    try {
+      const brandingContent = fs.readFileSync(brandingPath, 'utf-8');
+      branding = JSON.parse(brandingContent);
+    } catch (error) {
+      throw new Error(`Failed to read or parse branding file: ${error.message}`);
+    }
+    
+    let product;
+    try {
+      const productContent = fs.readFileSync(productJsonPath, 'utf-8');
+      product = JSON.parse(productContent);
+    } catch (error) {
+      throw new Error(`Failed to read or parse product.json: ${error.message}`);
+    }
+    
+    const mergedProduct = { ...product, ...branding };
+    
+    try {
+      fs.writeFileSync(productJsonPath, JSON.stringify(mergedProduct, null, 2));
+      console.log('✓ Branding injected successfully');
+      
+      if (fs.existsSync(backupPath)) {
+        fs.unlinkSync(backupPath);
+      }
+    } catch (error) {
+      throw new Error(`Failed to write product.json: ${error.message}`);
+    }
+    
+    return true;
+    
+  } catch (error) {
+    console.error('✗ Branding injection failed:', error.message);
+    
+    if (fs.existsSync(backupPath)) {
+      try {
+        fs.copyFileSync(backupPath, productJsonPath);
+        console.log('✓ Restored from backup');
+        fs.unlinkSync(backupPath);
+      } catch (restoreError) {
+        console.error('✗ Failed to restore backup:', restoreError.message);
+      }
+    }
+    
+    return false;
   }
 }
 
@@ -72,6 +131,10 @@ function injectExtensions() {
 }
 
 console.log('Injecting MyCode-AI customizations into Code-OSS...');
-injectBranding();
+const brandingSuccess = injectBranding();
 injectExtensions();
 console.log('Done!');
+
+if (!brandingSuccess) {
+  process.exit(1);
+}

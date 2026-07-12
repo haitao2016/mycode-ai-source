@@ -1,0 +1,176 @@
+{
+  "name": "mycode-ai-core",
+  "displayName": "MyCode-AI Core",
+  "description": "AI-powered coding assistant for MyCode-AI IDE",
+  "version": "0.1.0",
+  "publisher": "mycode-ai",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Programming Languages",
+    "Snippets",
+    "Debuggers",
+    "Testing"
+  ],
+  "keywords": [
+    "ai",
+    "copilot",
+    "code-generation",
+    "assistant",
+    "mycode-ai"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "mycode-ai-sidebar",
+          "title": "MyCode-AI",
+          "icon": "$(hubot)"
+        }
+      ]
+    },
+    "views": {
+      "mycode-ai-sidebar": [
+        {
+          "id": "mycode-ai.chat",
+          "name": "AI Chat",
+          "type": "webview",
+          "when": "mycode-ai.enabled"
+        },
+        {
+          "id": "mycode-ai.plan",
+          "name": "Plan",
+          "type": "webview",
+          "when": "mycode-ai.enabled"
+        },
+        {
+          "id": "mycode-ai.skills",
+          "name": "Skills",
+          "type": "webview",
+          "when": "mycode-ai.enabled"
+        }
+      ],
+      "explorer": [
+        {
+          "id": "mycode-ai.workspace",
+          "name": "Workspace",
+          "when": "mycode-ai.enabled"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "mycode-ai.openChat",
+        "title": "Open AI Chat",
+        "category": "MyCode-AI",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "mycode-ai.openPlan",
+        "title": "Open Plan Panel",
+        "category": "MyCode-AI",
+        "icon": "$(tasklist)"
+      },
+      {
+        "command": "mycode-ai.openSkills",
+        "title": "Open Skills Panel",
+        "category": "MyCode-AI",
+        "icon": "$(zap)"
+      },
+      {
+        "command": "mycode-ai.generateCode",
+        "title": "Generate Code with AI",
+        "category": "MyCode-AI",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "mycode-ai.reviewCode",
+        "title": "Review Code with AI",
+        "category": "MyCode-AI",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "mycode-ai.explainCode",
+        "title": "Explain Selected Code",
+        "category": "MyCode-AI",
+        "icon": "$(book)"
+      },
+      {
+        "command": "mycode-ai.toggle",
+        "title": "Toggle MyCode-AI",
+        "category": "MyCode-AI"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "mycode-ai.openChat",
+          "when": "mycode-ai.enabled"
+        },
+        {
+          "command": "mycode-ai.generateCode",
+          "when": "mycode-ai.enabled"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "mycode-ai.generateCode",
+          "when": "editorHasSelection && mycode-ai.enabled",
+          "group": "mycode-ai@1"
+        },
+        {
+          "command": "mycode-ai.explainCode",
+          "when": "editorHasSelection && mycode-ai.enabled",
+          "group": "mycode-ai@2"
+        },
+        {
+          "command": "mycode-ai.reviewCode",
+          "when": "editorHasSelection && mycode-ai.enabled",
+          "group": "mycode-ai@3"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "MyCode-AI",
+      "properties": {
+        "mycode-ai.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable MyCode-AI features"
+        },
+        "mycode-ai.provider": {
+          "type": "string",
+          "default": "openai",
+          "enum": ["openai", "anthropic", "google", "local"],
+          "description": "AI provider to use"
+        },
+        "mycode-ai.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "API key for the selected provider"
+        },
+        "mycode-ai.model": {
+          "type": "string",
+          "default": "gpt-4",
+          "description": "Model to use for AI requests"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.4.0"
+  }
+}

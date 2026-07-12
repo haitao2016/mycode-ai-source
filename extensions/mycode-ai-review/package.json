@@ -1,0 +1,96 @@
+{
+  "name": "mycode-ai-review",
+  "displayName": "MyCode AI Review",
+  "description": "AI-powered code review for MyCode",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": ["AI", "Code Review"],
+  "activationEvents": ["onCommand:mycode-ai.review.file", "onCommand:mycode-ai.review.selection", "onCommand:mycode-ai.review.workspace"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mycode-ai.review.file",
+        "title": "Review Current File",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.review.selection",
+        "title": "Review Selection",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.review.workspace",
+        "title": "Review Workspace",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.review.generateDoc",
+        "title": "Generate Documentation",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.review.refactor",
+        "title": "Suggest Refactoring",
+        "category": "MyCode AI"
+      }
+    ],
+    "configuration": {
+      "title": "MyCode AI Review",
+      "properties": {
+        "mycode-ai.review.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable AI code review"
+        },
+        "mycode-ai.review.checkStyle": {
+          "type": "boolean",
+          "default": true,
+          "description": "Check code style"
+        },
+        "mycode-ai.review.checkPerformance": {
+          "type": "boolean",
+          "default": true,
+          "description": "Check performance issues"
+        },
+        "mycode-ai.review.checkSecurity": {
+          "type": "boolean",
+          "default": true,
+          "description": "Check security vulnerabilities"
+        },
+        "mycode-ai.review.checkBestPractices": {
+          "type": "boolean",
+          "default": true,
+          "description": "Check best practices"
+        }
+      }
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "mycode-ai.review.selection",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "mycode-ai.review.file"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "mycode-ai.review.file"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -p ./ --watch",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

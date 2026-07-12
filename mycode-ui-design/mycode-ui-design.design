@@ -1,0 +1,25 @@
+{
+  "data": [
+    {
+      "id": "page-workspace",
+      "title": "MyCode AI 工作区",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1752102000000,
+      "canvasData": {
+        "x": 0,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/workspace.html",
+        "interactions": []
+      }
+    }
+  ],
+  "config": {
+    "autoLayout": true,
+    "deviceType": "desktop",
+    "projectName": "MyCode AI 工作区"
+  }
+}

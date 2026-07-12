@@ -1,0 +1,793 @@
+{
+  "providers": {
+    "claude_code": {
+      "id": "claude_code",
+      "name": "Claude Code",
+      "alias": "cc",
+      "baseUrl": "https://api.anthropic.com/v1/messages",
+      "format": "claude",
+      "category": "oauth",
+      "models": [
+        { "id": "claude-opus-4-7", "name": "Claude Opus 4.7", "contextWindow": 200000, "pricing": { "input": 0.015, "output": 0.075 } },
+        { "id": "claude-opus-4-6", "name": "Claude Opus 4.6", "contextWindow": 200000, "pricing": { "input": 0.015, "output": 0.075 } },
+        { "id": "claude-sonnet-4-6", "name": "Claude Sonnet 4.6", "contextWindow": 200000, "pricing": { "input": 0.003, "output": 0.015 } },
+        { "id": "claude-sonnet-4-5", "name": "Claude Sonnet 4.5", "contextWindow": 200000, "pricing": { "input": 0.003, "output": 0.015 } }
+      ]
+    },
+    "codex": {
+      "id": "codex",
+      "name": "OpenAI Codex",
+      "alias": "cx",
+      "baseUrl": "https://api.openai.com/v1/chat/completions",
+      "format": "openai",
+      "category": "oauth",
+      "models": [
+        { "id": "gpt-5.5", "name": "GPT-5.5", "contextWindow": 200000 },
+        { "id": "gpt-5.4", "name": "GPT-5.4", "contextWindow": 200000 },
+        { "id": "o1-pro", "name": "O1 Pro", "contextWindow": 200000 }
+      ]
+    },
+    "github": {
+      "id": "github",
+      "name": "GitHub Copilot",
+      "alias": "gh",
+      "baseUrl": "https://api.githubcopilot.com/chat/completions",
+      "format": "openai",
+      "category": "oauth",
+      "models": [
+        { "id": "gpt-5.4", "name": "GPT-5.4", "contextWindow": 128000 },
+        { "id": "claude-opus-4-7", "name": "Claude Opus 4.7", "contextWindow": 200000 },
+        { "id": "claude-sonnet-4-6", "name": "Claude Sonnet 4.6", "contextWindow": 200000 }
+      ]
+    },
+    "cursor": {
+      "id": "cursor",
+      "name": "Cursor IDE",
+      "alias": "cu",
+      "baseUrl": "https://api2.cursor.sh/aiserver/v1/chat/completions",
+      "format": "openai",
+      "category": "oauth",
+      "models": [
+        { "id": "claude-4.6-opus-max", "name": "Claude 4.6 Opus Max", "contextWindow": 200000 },
+        { "id": "claude-sonnet-4.5", "name": "Claude Sonnet 4.5", "contextWindow": 200000 },
+        { "id": "gpt-4o", "name": "GPT-4o", "contextWindow": 128000 }
+      ]
+    },
+    "antigravity": {
+      "id": "antigravity",
+      "name": "Antigravity",
+      "alias": "ag",
+      "baseUrl": "https://api.antigravity.dev/v1/chat/completions",
+      "format": "openai",
+      "category": "oauth",
+      "models": [
+        { "id": "claude-4-opus", "name": "Claude 4 Opus", "contextWindow": 200000 },
+        { "id": "claude-4-sonnet", "name": "Claude 4 Sonnet", "contextWindow": 200000 }
+      ]
+    },
+    "kilo": {
+      "id": "kilo",
+      "name": "Kilo Code",
+      "alias": "kl",
+      "baseUrl": "https://api.kilo.chat/v1/chat/completions",
+      "format": "openai",
+      "category": "oauth",
+      "models": [
+        { "id": "kilo-claude-4", "name": "Kilo Claude 4", "contextWindow": 200000 },
+        { "id": "kilo-gpt-4", "name": "Kilo GPT-4", "contextWindow": 128000 }
+      ]
+    },
+    "cline": {
+      "id": "cline",
+      "name": "Cline",
+      "alias": "cl",
+      "baseUrl": "https://api.cline.dev/v1/chat/completions",
+      "format": "openai",
+      "category": "oauth",
+      "models": [
+        { "id": "claude-4-opus", "name": "Claude 4 Opus", "contextWindow": 200000 },
+        { "id": "claude-4-sonnet", "name": "Claude 4 Sonnet", "contextWindow": 200000 }
+      ]
+    },
+    "codebuddy": {
+      "id": "codebuddy",
+      "name": "CodeBuddy CN",
+      "alias": "cbn",
+      "baseUrl": "https://api.codebuddy.cn/v1/chat/completions",
+      "format": "openai",
+      "category": "oauth",
+      "models": [
+        { "id": "claude-4-sonnet", "name": "Claude 4 Sonnet", "contextWindow": 200000 },
+        { "id": "glm-4", "name": "GLM-4", "contextWindow": 128000 }
+      ]
+    },
+    "kimchi": {
+      "id": "kimchi",
+      "name": "Kimchi",
+      "alias": "kc",
+      "baseUrl": "https://api.kimchi.dev/v1/chat/completions",
+      "format": "openai",
+      "category": "oauth",
+      "models": [
+        { "id": "claude-4-opus", "name": "Claude 4 Opus", "contextWindow": 200000 }
+      ]
+    },
+    "kiro": {
+      "id": "kiro",
+      "name": "Kiro AI",
+      "alias": "kr",
+      "baseUrl": "https://api.kiro.ai/v1/chat/completions",
+      "format": "openai",
+      "category": "free",
+      "models": [
+        { "id": "claude-sonnet-4-5", "name": "Claude Sonnet 4.5", "contextWindow": 200000 },
+        { "id": "glm-5", "name": "GLM-5", "contextWindow": 128000 },
+        { "id": "minimax-m2-7", "name": "MiniMax M2.7", "contextWindow": 128000 }
+      ]
+    },
+    "mimo": {
+      "id": "mimo",
+      "name": "MiMo Code Free",
+      "alias": "mmo",
+      "baseUrl": "https://api.mimo.dev/v1/chat/completions",
+      "format": "openai",
+      "category": "free",
+      "models": [
+        { "id": "claude-4-sonnet", "name": "Claude 4 Sonnet", "contextWindow": 200000 },
+        { "id": "glm-4", "name": "GLM-4", "contextWindow": 128000 }
+      ]
+    },
+    "qoder": {
+      "id": "qoder",
+      "name": "Qoder",
+      "alias": "qd",
+      "baseUrl": "https://api.qoder.dev/v1/chat/completions",
+      "format": "openai",
+      "category": "free",
+      "models": [
+        { "id": "claude-4-sonnet", "name": "Claude 4 Sonnet", "contextWindow": 200000 },
+        { "id": "gpt-4o", "name": "GPT-4o", "contextWindow": 128000 }
+      ]
+    },
+    "glm": {
+      "id": "glm",
+      "name": "GLM (智谱)",
+      "alias": "glm",
+      "baseUrl": "https://open.bigmodel.cn/api/paas/v4/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "glm-5.1", "name": "GLM-5.1", "contextWindow": 128000, "pricing": { "input": 0.0006, "output": 0.0006 } },
+        { "id": "glm-4.7", "name": "GLM-4.7", "contextWindow": 128000, "pricing": { "input": 0.001, "output": 0.001 } },
+        { "id": "glm-4-plus", "name": "GLM-4 Plus", "contextWindow": 128000, "pricing": { "input": 0.05, "output": 0.05 } },
+        { "id": "glm-4", "name": "GLM-4", "contextWindow": 128000 }
+      ]
+    },
+    "glm_coding": {
+      "id": "glm_coding",
+      "name": "GLM Coding",
+      "alias": "glmc",
+      "baseUrl": "https://open.bigmodel.cn/api/paas/v4/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "glm-4-coding", "name": "GLM-4 Coding", "contextWindow": 128000 },
+        { "id": "glm-5-coding", "name": "GLM-5 Coding", "contextWindow": 128000 }
+      ]
+    },
+    "minimax": {
+      "id": "minimax",
+      "name": "MiniMax (China)",
+      "alias": "mm",
+      "baseUrl": "https://api.minimax.chat/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "MiniMax-M2.7", "name": "MiniMax M2.7", "contextWindow": 128000, "pricing": { "input": 0.0002, "output": 0.0002 } },
+        { "id": "abab6.5s-chat", "name": "abab6.5s", "contextWindow": 245000 }
+      ]
+    },
+    "minimax_coding": {
+      "id": "minimax_coding",
+      "name": "MiniMax Coding",
+      "alias": "mmc",
+      "baseUrl": "https://api.minimax.chat/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "minimax-coding", "name": "MiniMax Coding", "contextWindow": 128000 }
+      ]
+    },
+    "kimi": {
+      "id": "kimi",
+      "name": "Kimi",
+      "alias": "km",
+      "baseUrl": "https://api.moonshot.cn/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "kimi-k2.5", "name": "Kimi K2.5", "contextWindow": 128000 },
+        { "id": "moonshot-v1-128k", "name": "Moonshot V1 128K", "contextWindow": 128000 },
+        { "id": "moonshot-v1-8k", "name": "Moonshot V1 8K", "contextWindow": 8000 }
+      ]
+    },
+    "deepseek": {
+      "id": "deepseek",
+      "name": "DeepSeek",
+      "alias": "ds",
+      "baseUrl": "https://api.deepseek.com/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "deepseek-chat", "name": "DeepSeek Chat", "contextWindow": 64000, "pricing": { "input": 0.00027, "output": 0.0011 } },
+        { "id": "deepseek-reasoner", "name": "DeepSeek Reasoner", "contextWindow": 64000, "pricing": { "input": 0.00055, "output": 0.00219 } },
+        { "id": "deepseek-r1.5", "name": "DeepSeek R1.5", "contextWindow": 64000 }
+      ]
+    },
+    "qwen": {
+      "id": "qwen",
+      "name": "Alibaba",
+      "alias": "qw",
+      "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "qwen-max", "name": "Qwen Max", "contextWindow": 32768 },
+        { "id": "qwen-plus", "name": "Qwen Plus", "contextWindow": 128000 },
+        { "id": "qwen-turbo", "name": "Qwen Turbo", "contextWindow": 128000 },
+        { "id": "qwen-long", "name": "Qwen Long", "contextWindow": 10000 }
+      ]
+    },
+    "alibaba_intl": {
+      "id": "alibaba_intl",
+      "name": "Alibaba Intl",
+      "alias": "ali",
+      "baseUrl": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "qwen-max", "name": "Qwen Max", "contextWindow": 32768 },
+        { "id": "qwen-plus", "name": "Qwen Plus", "contextWindow": 128000 }
+      ]
+    },
+    "openai": {
+      "id": "openai",
+      "name": "OpenAI",
+      "alias": "oa",
+      "baseUrl": "https://api.openai.com/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "gpt-4o", "name": "GPT-4o", "contextWindow": 128000, "pricing": { "input": 0.0025, "output": 0.01 } },
+        { "id": "gpt-4o-mini", "name": "GPT-4o Mini", "contextWindow": 128000, "pricing": { "input": 0.00015, "output": 0.0006 } },
+        { "id": "gpt-4-turbo", "name": "GPT-4 Turbo", "contextWindow": 128000, "pricing": { "input": 0.01, "output": 0.03 } },
+        { "id": "o1", "name": "O1", "contextWindow": 200000, "pricing": { "input": 0.015, "output": 0.06 } },
+        { "id": "o1-mini", "name": "O1 Mini", "contextWindow": 200000, "pricing": { "input": 0.003, "output": 0.012 } },
+        { "id": "o3-mini", "name": "O3 Mini", "contextWindow": 200000 }
+      ]
+    },
+    "anthropic": {
+      "id": "anthropic",
+      "name": "Anthropic",
+      "alias": "cc",
+      "baseUrl": "https://api.anthropic.com/v1/messages",
+      "format": "claude",
+      "category": "apikey",
+      "models": [
+        { "id": "claude-opus-4-5-20250514", "name": "Claude Opus 4.5", "contextWindow": 200000, "pricing": { "input": 0.015, "output": 0.075 } },
+        { "id": "claude-sonnet-4-5-20250514", "name": "Claude Sonnet 4.5", "contextWindow": 200000, "pricing": { "input": 0.003, "output": 0.015 } },
+        { "id": "claude-3-5-haiku-20241022", "name": "Claude 3.5 Haiku", "contextWindow": 200000, "pricing": { "input": 0.001, "output": 0.005 } }
+      ]
+    },
+    "gemini": {
+      "id": "gemini",
+      "name": "Gemini",
+      "alias": "gm",
+      "baseUrl": "https://generativelanguage.googleapis.com/v1beta/models",
+      "format": "gemini",
+      "category": "apikey",
+      "models": [
+        { "id": "gemini-3.1-pro-preview", "name": "Gemini 3.1 Pro", "contextWindow": 1000000 },
+        { "id": "gemini-2.5-pro", "name": "Gemini 2.5 Pro", "contextWindow": 1000000, "pricing": { "input": 0.00125, "output": 0.005 } },
+        { "id": "gemini-2.0-flash", "name": "Gemini 2.0 Flash", "contextWindow": 1000000, "pricing": { "input": 0.0001, "output": 0.0004 } },
+        { "id": "gemini-1.5-pro", "name": "Gemini 1.5 Pro", "contextWindow": 1000000 }
+      ]
+    },
+    "mistral": {
+      "id": "mistral",
+      "name": "Mistral AI",
+      "alias": "ms",
+      "baseUrl": "https://api.mistral.ai/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "mistral-large-2411", "name": "Mistral Large", "contextWindow": 128000 },
+        { "id": "mistral-medium-2312", "name": "Mistral Medium", "contextWindow": 32000 },
+        { "id": "codestral-2405", "name": "Codestral", "contextWindow": 32000 },
+        { "id": "pixtral-12b-2409", "name": "Pixtral 12B", "contextWindow": 128000 }
+      ]
+    },
+    "xai": {
+      "id": "xai",
+      "name": "xAI (Grok)",
+      "alias": "xai",
+      "baseUrl": "https://api.x.ai/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "grok-3", "name": "Grok 3", "contextWindow": 128000 },
+        { "id": "grok-2-latest", "name": "Grok 2", "contextWindow": 128000 },
+        { "id": "grok-beta", "name": "Grok Beta", "contextWindow": 128000 }
+      ]
+    },
+    "perplexity": {
+      "id": "perplexity",
+      "name": "Perplexity",
+      "alias": "pp",
+      "baseUrl": "https://api.perplexity.ai/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "llama-3.3-70b-instruct", "name": "Llama 3.3 70B", "contextWindow": 128000 },
+        { "id": "sonar-pro", "name": "Sonar Pro", "contextWindow": 200000 },
+        { "id": "sonar-reasoning-pro", "name": "Sonar Reasoning Pro", "contextWindow": 128000 }
+      ]
+    },
+    "groq": {
+      "id": "groq",
+      "name": "Groq",
+      "alias": "gr",
+      "baseUrl": "https://api.groq.com/openai/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "llama-3.3-70b-versatile", "name": "Llama 3.3 70B", "contextWindow": 128000, "pricing": { "input": 0.00059, "output": 0.00079 } },
+        { "id": "llama-3.1-8b-instant", "name": "Llama 3.1 8B", "contextWindow": 128000, "pricing": { "input": 0.00002, "output": 0.00002 } },
+        { "id": "mixtral-8x7b-32768", "name": "Mixtral 8x7B", "contextWindow": 32768 },
+        { "id": "deepseek-r1-distill-llama-70b", "name": "DeepSeek R1 Llama 70B", "contextWindow": 128000 }
+      ]
+    },
+    "cerebras": {
+      "id": "cerebras",
+      "name": "Cerebras",
+      "alias": "cb",
+      "baseUrl": "https://api.cerebras.ai/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "llama-3.3-70b", "name": "Llama 3.3 70B", "contextWindow": 128000 },
+        { "id": "llama3.1-70b", "name": "Llama 3.1 70B", "contextWindow": 128000 }
+      ]
+    },
+    "fireworks": {
+      "id": "fireworks",
+      "name": "Fireworks AI",
+      "alias": "fw",
+      "baseUrl": "https://api.fireworks.ai/inference/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "accounts/fireworks/models/llama-v3p3-70b-instruct", "name": "Llama 3.3 70B", "contextWindow": 128000 },
+        { "id": "accounts/fireworks/models/qwen2p5-72b-instruct", "name": "Qwen 2.5 72B", "contextWindow": 128000 }
+      ]
+    },
+    "together": {
+      "id": "together",
+      "name": "Together AI",
+      "alias": "tg",
+      "baseUrl": "https://api.together.xyz/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "meta-llama/Llama-3.3-70B-Instruct-Turbo", "name": "Llama 3.3 70B", "contextWindow": 128000 },
+        { "id": "Qwen/Qwen2.5-72B-Instruct-Turbo", "name": "Qwen 2.5 72B", "contextWindow": 128000 },
+        { "id": "deepseek-ai/DeepSeek-V3", "name": "DeepSeek V3", "contextWindow": 128000 }
+      ]
+    },
+    "openrouter": {
+      "id": "openrouter",
+      "name": "OpenRouter",
+      "alias": "or",
+      "baseUrl": "https://openrouter.ai/api/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "auto", "name": "Auto", "contextWindow": 128000 },
+        { "id": "anthropic/claude-3.5-sonnet", "name": "Claude 3.5 Sonnet", "contextWindow": 200000 },
+        { "id": "openai/gpt-4o", "name": "GPT-4o", "contextWindow": 128000 },
+        { "id": "google/gemini-2.5-pro-preview", "name": "Gemini 2.5 Pro", "contextWindow": 1000000 },
+        { "id": "meta-llama/llama-3.3-70b-instruct", "name": "Llama 3.3 70B", "contextWindow": 128000 }
+      ]
+    },
+    "siliconflow": {
+      "id": "siliconflow",
+      "name": "SiliconFlow",
+      "alias": "sf",
+      "baseUrl": "https://api.siliconflow.cn/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "Qwen/Qwen2.5-72B-Instruct", "name": "Qwen 2.5 72B", "contextWindow": 128000 },
+        { "id": "deepseek-ai/DeepSeek-V3", "name": "DeepSeek V3", "contextWindow": 64000 },
+        { "id": "THUDM/GLM-4-9B-0414", "name": "GLM-4 9B", "contextWindow": 128000 }
+      ]
+    },
+    "cohere": {
+      "id": "cohere",
+      "name": "Cohere",
+      "alias": "ch",
+      "baseUrl": "https://api.cohere.ai/v1/chat",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "command-r-plus-08-2024", "name": "Command R Plus", "contextWindow": 256000 },
+        { "id": "command-r-08-2024", "name": "Command R", "contextWindow": 128000 }
+      ]
+    },
+    "command_code": {
+      "id": "command_code",
+      "name": "Command Code",
+      "alias": "ccode",
+      "baseUrl": "https://api.cohere.ai/v1/chat",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "command-c", "name": "Command C", "contextWindow": 128000 }
+      ]
+    },
+    "nvidia": {
+      "id": "nvidia",
+      "name": "NVIDIA NIM",
+      "alias": "nv",
+      "baseUrl": "https://integrate.api.nvidia.com/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "nvidia/llama-3.3-nemotron-super-49b-v1", "name": "Nemotron Super 49B", "contextWindow": 128000 },
+        { "id": "meta/llama-3.3-70b-instruct", "name": "Llama 3.3 70B", "contextWindow": 128000 }
+      ]
+    },
+    "nebius": {
+      "id": "nebius",
+      "name": "Nebius AI",
+      "alias": "nb",
+      "baseUrl": "https://api.studio.nebius.ai/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "meta-llama/Meta-Llama-3.1-70B-Instruct", "name": "Llama 3.1 70B", "contextWindow": 128000 },
+        { "id": "Qwen/Qwen2.5-72B-instruct", "name": "Qwen 2.5 72B", "contextWindow": 128000 }
+      ]
+    },
+    "azure": {
+      "id": "azure",
+      "name": "Azure OpenAI",
+      "alias": "az",
+      "baseUrl": "https://api.openai.com/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "gpt-4o", "name": "GPT-4o", "contextWindow": 128000 },
+        { "id": "gpt-4-turbo", "name": "GPT-4 Turbo", "contextWindow": 128000 },
+        { "id": "gpt-4", "name": "GPT-4", "contextWindow": 8192 }
+      ]
+    },
+    "blackbox": {
+      "id": "blackbox",
+      "name": "Blackbox AI",
+      "alias": "bb",
+      "baseUrl": "https://www.blackbox.ai/api/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "blackbox-ai", "name": "Blackbox AI", "contextWindow": 128000 }
+      ]
+    },
+    "chutes": {
+      "id": "chutes",
+      "name": "Chutes AI",
+      "alias": "cs",
+      "baseUrl": "https://api.chutes.ai/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "claude-4-sonnet", "name": "Claude 4 Sonnet", "contextWindow": 200000 }
+      ]
+    },
+    "hyperbolic": {
+      "id": "hyperbolic",
+      "name": "Hyperbolic",
+      "alias": "hb",
+      "baseUrl": "https://api.hyperbolic.xyz/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "llama-3.3-70b", "name": "Llama 3.3 70B", "contextWindow": 128000 }
+      ]
+    },
+    "venice": {
+      "id": "venice",
+      "name": "Venice AI",
+      "alias": "vn",
+      "baseUrl": "https://api.venice.ai/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "venice-ai", "name": "Venice AI", "contextWindow": 128000 }
+      ]
+    },
+    "vercel": {
+      "id": "vercel",
+      "name": "Vercel AI Gateway",
+      "alias": "vg",
+      "baseUrl": "https://api.vercel.ai/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "openai/gpt-4o", "name": "GPT-4o", "contextWindow": 128000 },
+        { "id": "anthropic/claude-3.5-sonnet", "name": "Claude 3.5 Sonnet", "contextWindow": 200000 }
+      ]
+    },
+    "byteplus": {
+      "id": "byteplus",
+      "name": "BytePlus ModelArk",
+      "alias": "bp",
+      "baseUrl": "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "qwen-max", "name": "Qwen Max", "contextWindow": 32768 },
+        { "id": "qwen-plus", "name": "Qwen Plus", "contextWindow": 128000 }
+      ]
+    },
+    "volcengine": {
+      "id": "volcengine",
+      "name": "Volcengine Ark",
+      "alias": "ve",
+      "baseUrl": "https://ark.volces.com/api/v3/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "qwen-max", "name": "Qwen Max", "contextWindow": 32768 },
+        { "id": "qwen-plus", "name": "Qwen Plus", "contextWindow": 128000 }
+      ]
+    },
+    "ollama": {
+      "id": "ollama",
+      "name": "Ollama Local",
+      "alias": "ol",
+      "baseUrl": "http://localhost:11434/v1/chat/completions",
+      "format": "openai",
+      "category": "free",
+      "models": [
+        { "id": "llama3.3:70b", "name": "Llama 3.3 70B", "contextWindow": 128000 },
+        { "id": "qwen2.5:72b", "name": "Qwen 2.5 72B", "contextWindow": 128000 },
+        { "id": "deepseek-r1:70b", "name": "DeepSeek R1 70B", "contextWindow": 128000 },
+        { "id": "codellama:70b", "name": "Code Llama 70B", "contextWindow": 128000 }
+      ]
+    },
+    "ollama_cloud": {
+      "id": "ollama_cloud",
+      "name": "Ollama Cloud",
+      "alias": "olc",
+      "baseUrl": "https://api.ollama.com/v1/chat/completions",
+      "format": "openai",
+      "category": "free",
+      "models": [
+        { "id": "llama3.3:70b", "name": "Llama 3.3 70B", "contextWindow": 128000 },
+        { "id": "qwen2.5:72b", "name": "Qwen 2.5 72B", "contextWindow": 128000 }
+      ]
+    },
+    "vertex": {
+      "id": "vertex",
+      "name": "Vertex AI",
+      "alias": "vx",
+      "baseUrl": "https://us-central1-aiplatform.googleapis.com/v1",
+      "format": "gemini",
+      "category": "free",
+      "models": [
+        { "id": "gemini-3.1-pro-preview", "name": "Gemini 3.1 Pro", "contextWindow": 1000000 },
+        { "id": "gemini-2.5-pro-preview-05-06", "name": "Gemini 2.5 Pro", "contextWindow": 1000000 }
+      ]
+    },
+    "vertex_partner": {
+      "id": "vertex_partner",
+      "name": "Vertex Partner",
+      "alias": "vxp",
+      "baseUrl": "https://us-central1-aiplatform.googleapis.com/v1",
+      "format": "gemini",
+      "category": "free",
+      "models": [
+        { "id": "gemini-3.1-pro-preview", "name": "Gemini 3.1 Pro", "contextWindow": 1000000 }
+      ]
+    },
+    "opencode": {
+      "id": "opencode",
+      "name": "OpenCode Free",
+      "alias": "oc",
+      "baseUrl": "https://api.opencode.ai/v1/chat/completions",
+      "format": "openai",
+      "category": "free",
+      "models": [
+        { "id": "auto", "name": "Auto", "contextWindow": 128000 }
+      ]
+    },
+    "opencode_go": {
+      "id": "opencode_go",
+      "name": "OpenCode Go",
+      "alias": "ocg",
+      "baseUrl": "https://api.opencode.com/v1/chat/completions",
+      "format": "openai",
+      "category": "free",
+      "models": [
+        { "id": "auto", "name": "Auto", "contextWindow": 128000 }
+      ]
+    },
+    "gemini_cli": {
+      "id": "gemini_cli",
+      "name": "Gemini CLI",
+      "alias": "gcli",
+      "baseUrl": "https://generativelanguage.googleapis.com/v1beta/models",
+      "format": "gemini",
+      "category": "free",
+      "models": [
+        { "id": "gemini-2.0-flash", "name": "Gemini 2.0 Flash", "contextWindow": 1000000 }
+      ]
+    },
+    "cloudflare": {
+      "id": "cloudflare",
+      "name": "Cloudflare",
+      "alias": "cf",
+      "baseUrl": "https://api.cloudflare.com/client/v4/accounts/ai/run",
+      "format": "openai",
+      "category": "free",
+      "models": [
+        { "id": "@cf/meta/llama-3.3-8b-instruct", "name": "Llama 3.3 8B", "contextWindow": 128000 }
+      ]
+    },
+    "xiaomi_mimo": {
+      "id": "xiaomi_mimo",
+      "name": "Xiaomi MiMo",
+      "alias": "xm",
+      "baseUrl": "https://api.mimo.mi.com/v1/chat/completions",
+      "format": "openai",
+      "category": "free",
+      "models": [
+        { "id": "mimo-llm", "name": "MiMo LLM", "contextWindow": 128000 }
+      ]
+    },
+    "xiaomi_mimo_token": {
+      "id": "xiaomi_mimo_token",
+      "name": "Xiaomi MiMo Token",
+      "alias": "xmt",
+      "baseUrl": "https://api.mimo.mi.com/v1/chat/completions",
+      "format": "openai",
+      "category": "apikey",
+      "models": [
+        { "id": "mimo-llm-pro", "name": "MiMo LLM Pro", "contextWindow": 128000 }
+      ]
+    },
+    "local": {
+      "id": "local",
+      "name": "本地模型",
+      "alias": "lc",
+      "baseUrl": "http://localhost:8080/v1/chat/completions",
+      "format": "openai",
+      "category": "free",
+      "models": [
+        { "id": "local-model", "name": "本地模型", "contextWindow": 8192 }
+      ]
+    }
+  },
+  "aliasMap": {
+    "cc": "claude_code",
+    "claude_code": "claude_code",
+    "cx": "codex",
+    "codex": "codex",
+    "gh": "github",
+    "github": "github",
+    "cu": "cursor",
+    "cursor": "cursor",
+    "ag": "antigravity",
+    "antigravity": "antigravity",
+    "kl": "kilo",
+    "kilo": "kilo",
+    "cl": "cline",
+    "cline": "cline",
+    "cbn": "codebuddy",
+    "codebuddy": "codebuddy",
+    "kc": "kimchi",
+    "kimchi": "kimchi",
+    "kr": "kiro",
+    "kiro": "kiro",
+    "mmo": "mimo",
+    "mimo": "mimo",
+    "qd": "qoder",
+    "qoder": "qoder",
+    "glm": "glm",
+    "glmc": "glm_coding",
+    "glm_coding": "glm_coding",
+    "mm": "minimax",
+    "minimax": "minimax",
+    "mmc": "minimax_coding",
+    "minimax_coding": "minimax_coding",
+    "km": "kimi",
+    "kimi": "kimi",
+    "ds": "deepseek",
+    "deepseek": "deepseek",
+    "qw": "qwen",
+    "qwen": "qwen",
+    "ali": "alibaba_intl",
+    "alibaba_intl": "alibaba_intl",
+    "oa": "openai",
+    "openai": "openai",
+    "anthropic": "anthropic",
+    "gm": "gemini",
+    "gemini": "gemini",
+    "google": "gemini",
+    "gcli": "gemini_cli",
+    "gemini_cli": "gemini_cli",
+    "ms": "mistral",
+    "mistral": "mistral",
+    "xai": "xai",
+    "pp": "perplexity",
+    "perplexity": "perplexity",
+    "gr": "groq",
+    "groq": "groq",
+    "cb": "cerebras",
+    "cerebras": "cerebras",
+    "fw": "fireworks",
+    "fireworks": "fireworks",
+    "tg": "together",
+    "together": "together",
+    "or": "openrouter",
+    "openrouter": "openrouter",
+    "sf": "siliconflow",
+    "siliconflow": "siliconflow",
+    "ch": "cohere",
+    "cohere": "cohere",
+    "ccode": "command_code",
+    "command_code": "command_code",
+    "nv": "nvidia",
+    "nvidia": "nvidia",
+    "nb": "nebius",
+    "nebius": "nebius",
+    "az": "azure",
+    "azure": "azure",
+    "bb": "blackbox",
+    "blackbox": "blackbox",
+    "cs": "chutes",
+    "chutes": "chutes",
+    "hb": "hyperbolic",
+    "hyperbolic": "hyperbolic",
+    "vn": "venice",
+    "venice": "venice",
+    "vg": "vercel",
+    "vercel": "vercel",
+    "bp": "byteplus",
+    "byteplus": "byteplus",
+    "ve": "volcengine",
+    "volcengine": "volcengine",
+    "ol": "ollama",
+    "ollama": "ollama",
+    "olc": "ollama_cloud",
+    "ollama_cloud": "ollama_cloud",
+    "vx": "vertex",
+    "vertex": "vertex",
+    "vxp": "vertex_partner",
+    "vertex_partner": "vertex_partner",
+    "oc": "opencode",
+    "opencode": "opencode",
+    "ocg": "opencode_go",
+    "opencode_go": "opencode_go",
+    "cf": "cloudflare",
+    "cloudflare": "cloudflare",
+    "xm": "xiaomi_mimo",
+    "xiaomi_mimo": "xiaomi_mimo",
+    "xmt": "xiaomi_mimo_token",
+    "xiaomi_mimo_token": "xiaomi_mimo_token",
+    "lc": "local",
+    "local": "local",
+    "localhost": "local"
+  }
+}

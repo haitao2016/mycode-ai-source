@@ -1,0 +1,166 @@
+{
+  "name": "mycode-ai-debug",
+  "displayName": "MyCode AI Debug",
+  "description": "Debugger integration and AI debugging assistant for MyCode",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": ["Debuggers", "AI"],
+  "activationEvents": ["onStartupFinished", "onCommand:mycode-ai.debug.*"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mycode-ai.debug.start",
+        "title": "Start Debugging",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.debug.stop",
+        "title": "Stop Debugging",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.debug.restart",
+        "title": "Restart Debugging",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.debug.pause",
+        "title": "Pause Debugging",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.debug.ai-assist",
+        "title": "AI Debug Assistant",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.debug.analyze-error",
+        "title": "Analyze Error",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.debug.watch-variable",
+        "title": "Watch Variable",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.debug.evaluate",
+        "title": "Evaluate Expression",
+        "category": "MyCode AI"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "mycode-ai.debug.start",
+        "key": "f5"
+      },
+      {
+        "command": "mycode-ai.debug.stop",
+        "key": "shift+f5"
+      },
+      {
+        "command": "mycode-ai.debug.restart",
+        "key": "ctrl+shift+f5",
+        "mac": "cmd+shift+f5"
+      },
+      {
+        "command": "mycode-ai.debug.pause",
+        "key": "f6"
+      }
+    ],
+    "configuration": {
+      "title": "MyCode AI Debug",
+      "properties": {
+        "mycode-ai.debug.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable debugger integration"
+        },
+        "mycode-ai.debug.aiAssistEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable AI debug assistant"
+        },
+        "mycode-ai.debug.autoAnalyzeErrors": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically analyze errors when debugging"
+        }
+      }
+    },
+    "breakpoints": [
+      {
+        "language": "typescript"
+      },
+      {
+        "language": "typescriptreact"
+      },
+      {
+        "language": "javascript"
+      },
+      {
+        "language": "javascriptreact"
+      },
+      {
+        "language": "python"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "node",
+        "label": "Node.js",
+        "configurationAttributes": {
+          "launch": {
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "The program to debug"
+              },
+              "args": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "Command line arguments"
+              },
+              "cwd": {
+                "type": "string",
+                "description": "Working directory"
+              },
+              "runtimeExecutable": {
+                "type": "string",
+                "description": "Path to node executable"
+              }
+            }
+          },
+          "attach": {
+            "properties": {
+              "port": {
+                "type": "number",
+                "description": "Debug port"
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Node.js",
+            "program": "${file}"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -p ./ --watch",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

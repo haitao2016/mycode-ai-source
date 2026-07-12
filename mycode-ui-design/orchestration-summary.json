@@ -1,0 +1,38 @@
+{
+  "project": {
+    "name": "MyCode AI 项目界面设计",
+    "operation": "create",
+    "designRead": "Developer tools dashboard + AI IDE / technical users / calm dark tech trust / medium density / avoid generic blue SaaS",
+    "designDials": {
+      "layoutVariance": 2,
+      "motionIntensity": 1,
+      "visualDensity": 4
+    }
+  },
+  "designSource": {
+    "operatingMode": "free-explore",
+    "brandCSSPath": "colors_and_type.css"
+  },
+  "pages": [
+    {
+      "nodeId": "page-dashboard",
+      "title": "项目 Dashboard",
+      "visualNorthStar": "Data-rich project management dashboard with dark theme, sidebar navigation, stats cards, activity feed, and team overview",
+      "continuityAnchors": {
+        "colorSystem": "--brand-primary: #6C5CE7 dark surface scale",
+        "typographySystem": "Inter for display and body, JetBrains Mono for code"
+      }
+    },
+    {
+      "nodeId": "page-ide-interface",
+      "title": "AI IDE 界面",
+      "visualNorthStar": "Full AI IDE interface with activity bar, file explorer, code editor with syntax highlighting, integrated AI chat panel, and terminal",
+      "continuityAnchors": {
+        "colorSystem": "--brand-primary: #6C5CE7 dark surface scale",
+        "typographySystem": "Inter for display and body, JetBrains Mono for code"
+      }
+    }
+  ],
+  "assets": [],
+  "wiringPlan": []
+}

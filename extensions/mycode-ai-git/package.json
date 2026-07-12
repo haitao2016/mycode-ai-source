@@ -1,0 +1,119 @@
+{
+  "name": "mycode-ai-git",
+  "displayName": "MyCode AI Git",
+  "description": "Git integration and enhanced search for MyCode",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": ["Git", "Search"],
+  "activationEvents": ["onStartupFinished", "onCommand:mycode-ai.git.*", "onCommand:mycode-ai.search.*"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mycode-ai.git.status",
+        "title": "Git Status",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.git.commit",
+        "title": "Git Commit",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.git.push",
+        "title": "Git Push",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.git.pull",
+        "title": "Git Pull",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.git.init",
+        "title": "Initialize Repository",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.search.global",
+        "title": "Global Search",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.search.symbol",
+        "title": "Symbol Search",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.search.file",
+        "title": "File Search",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.search.semantic",
+        "title": "Semantic Search",
+        "category": "MyCode AI"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "mycode-ai.search.global",
+        "key": "ctrl+shift+f",
+        "mac": "cmd+shift+f"
+      },
+      {
+        "command": "mycode-ai.search.file",
+        "key": "ctrl+p",
+        "mac": "cmd+p"
+      },
+      {
+        "command": "mycode-ai.search.symbol",
+        "key": "ctrl+shift+o",
+        "mac": "cmd+shift+o"
+      }
+    ],
+    "views": {
+      "activitybar": [
+        {
+          "id": "mycode-ai.git",
+          "name": "Git",
+          "icon": "$(git-branch)",
+          "type": "webview"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "MyCode AI Git",
+      "properties": {
+        "mycode-ai.git.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Git integration"
+        },
+        "mycode-ai.search.include": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["**/*.{ts,tsx,js,jsx,py,go,rs,java,json,yaml,md}"],
+          "description": "File patterns to include in search"
+        },
+        "mycode-ai.search.exclude": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["node_modules/**", ".git/**", "dist/**"],
+          "description": "File patterns to exclude from search"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -p ./ --watch",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

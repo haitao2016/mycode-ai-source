@@ -1,0 +1,71 @@
+{
+  "name": "mycode-ai-lsp",
+  "displayName": "MyCode AI LSP",
+  "description": "Language Server Protocol integration for MyCode",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": ["LSP", "Language"],
+  "activationEvents": ["onStartupFinished", "onLanguage:typescript", "onLanguage:typescriptreact", "onLanguage:javascript", "onLanguage:javascriptreact", "onLanguage:python"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mycode-ai.lsp.restart",
+        "title": "Restart Language Servers",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.lsp.status",
+        "title": "Show LSP Status",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.lsp.enable",
+        "title": "Enable LSP",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.lsp.disable",
+        "title": "Disable LSP",
+        "category": "MyCode AI"
+      }
+    ],
+    "configuration": {
+      "title": "MyCode AI LSP",
+      "properties": {
+        "mycode-ai.lsp.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Language Server Protocol"
+        },
+        "mycode-ai.lsp.typescript.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable TypeScript language server"
+        },
+        "mycode-ai.lsp.python.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Python language server"
+        },
+        "mycode-ai.lsp.python.path": {
+          "type": "string",
+          "default": "python",
+          "description": "Python interpreter path"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -p ./ --watch",
+    "package": "vsce package"
+  },
+  
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyCode AI 工作区</title>
+    <style id="theme-vars">
+/* ═══════════════════════════════════════════════════════
+   MyCode AI — Brand Design System
+   Modern Dark AI IDE Product Style
+   ═══════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Brand Primary ── */
+  --brand-primary: #6C5CE7;
+  --brand-primary-hover: #7F71EB;
+  --brand-primary-active: #5A4BD6;
+  --brand-primary-muted: rgba(108, 92, 231, 0.12);
+  --brand-primary-subtle: rgba(108, 92, 231, 0.06);
+
+  /* ── Surface Scale (dark → light) ── */
+  --surface-0: #09090B;
+  --surface-1: #111113;
+  --surface-2: #18181B;
+  --surface-3: #1F1F23;
+  --surface-4: #27272B;
+  --surface-5: #303036;
+
+  /* ── Text Scale ── */
+  --text-primary: #FAFAFA;
+  --text-secondary: #A1A1AA;
+  --text-tertiary: #63636E;
+  --text-muted: #3F3F46;
+
+  /* ── Borders ── */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.12);
+
+  /* ── Semantic ── */
+  --color-success: #34D399;
+  --color-warning: #FBBF24;
+  --color-error: #F87171;
+  --color-info: #60A5FA;
+
+  /* ── Typography ── */
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+
+  /* ── Spacing ── */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-base: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* ── Radius ── */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+
+  /* ── Transitions ── */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-primary: var(--brand-primary);
+  }
+  @layer base {
+    body { background: var(--brand-background); color: var(--brand-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+    <main id="ide-root">
+
+      <!-- ═══ TITLE BAR ═══ -->
+      <div class="title-bar">
+        <div class="traffic-lights">
+          <div class="traffic-light tl-red"></div>
+          <div class="traffic-light tl-yellow"></div>
+          <div class="traffic-light tl-green"></div>
+        </div>
+        <span class="title-text">App.tsx — mycode-ai</span>
+        <div class="title-controls">
+          <button><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="8" x2="14" y2="8"/></svg></button>
+          <button><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="10" height="10" rx="1"/></svg></button>
+          <button><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/></svg></button>
+        </div>
+      </div>
+
+      <!-- ═══ MAIN ROW ═══ -->
+      <div class="main-row">
+
+        <!-- ── Activity Bar ── -->
+        <div class="activity-bar">
+          <div class="activity-top">
+            <div class="activity-icon active" title="资源管理器">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 7V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V9C21 7.89543 20.1046 7 19 7H13L11 5H5C3.89543 5 3 5.89543 3 7Z"/></svg>
+            </div>
+            <div class="activity-icon" title="搜索">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <div class="activity-icon" title="源代码管理">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9C18 9 14 12 6 15"/></svg>
+              <span class="badge-count">2</span>
+            </div>
+            <div class="activity-icon" title="运行和调试">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            </div>
+            <div class="activity-icon" title="扩展">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            </div>
+          </div>
+          <div class="activity-sep"></div>
+          <div class="activity-bottom">
+            <div class="activity-icon" title="AI 助手">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2L9.5 8.5L3 12L9.5 15.5L12 22L14.5 15.5L21 12L14.5 8.5L12 2Z"/><path d="M12 8V16"/><path d="M8 12H16"/></svg>
+              <div class="ai-dot"></div>
+            </div>
+            <div class="activity-icon" title="设置">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            </div>
+            <div class="user-avatar" title="账户">张</div>
+          </div>
+        </div>
+
+        <!-- ── Sidebar ── -->
+        <div class="sidebar">
+          <div class="sidebar-tabs">
+            <div class="sidebar-tab active" data-tab="explorer">资源管理器</div>
+            <div class="sidebar-tab" data-tab="dashboard">项目概览</div>
+          </div>
+
+          <!-- VIEW 1: File Explorer -->
+          <div class="sidebar-view visible" id="view-explorer">
+            <div class="explorer-header">
+              <div class="explorer-header-left">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 7V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V9C21 7.89543 20.1046 7 19 7H13L11 5H5C3.89543 5 3 5.89543 3 7Z"/></svg>
+                <span>EXPLORER</span>
+              </div>
+              <div class="explorer-header-actions">
+                <button title="新建文件"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="8" y1="3" x2="8" y2="13"/><line x1="3" y1="8" x2="13" y2="8"/></svg></button>
+                <button title="折叠全部"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3,6 8,10 13,6"/></svg></button>
+                <button title="更多"><svg viewBox="0 0 16 16" fill="currentColor" stroke="none"><circle cx="4" cy="8" r="1"/><circle cx="8" cy="8" r="1"/><circle cx="12" cy="8" r="1"/></svg></button>
+              </div>
+            </div>
+            <div class="file-tree">
+              <div class="tree-section-label">MYCODE-AI</div>
+
+              <!-- src/ expanded -->
+              <div class="tree-item" style="padding-left: 12px;">
+                <div class="tree-indent"><span class="tree-chevron"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor"><polyline points="4,3 10,8 4,13"/></svg></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#EAB308" stroke="none"><path d="M2 3.5C2 2.67 2.67 2 3.5 2H6.5L8 4H12.5C13.33 4 14 4.67 14 5.5V6H1V3.5ZM1 7H14V12.5C14 13.33 13.33 14 12.5 14H2.5C1.67 14 1 13.33 1 12.5V7Z"/></svg></div>
+                <span class="tree-name">src</span>
+              </div>
+
+              <!-- src/main/ collapsed -->
+              <div class="tree-item" style="padding-left: 26px;">
+                <div class="tree-indent"><span class="tree-chevron"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor"><polyline points="6,3 12,8 6,13"/></svg></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#EAB308" stroke="none"><path d="M2 3.5C2 2.67 2.67 2 3.5 2H6.5L8 4H12.5C13.33 4 14 4.67 14 5.5V6H1V3.5ZM1 7H14V12.5C14 13.33 13.33 14 12.5 14H2.5C1.67 14 1 13.33 1 12.5V7Z"/></svg></div>
+                <span class="tree-name">main</span>
+              </div>
+
+              <!-- src/main/index.ts -->
+              <div class="tree-item" style="padding-left: 40px;">
+                <div class="tree-indent"><span class="tree-spacer"></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#60A5FA" stroke="none"><rect x="3" y="2" width="10" height="12" rx="1.5"/><rect x="5" y="1" width="6" height="2" rx="0.5" fill="#3B82F6"/></svg></div>
+                <span class="tree-name">index.ts</span>
+              </div>
+
+              <!-- src/preload/ collapsed -->
+              <div class="tree-item" style="padding-left: 26px;">
+                <div class="tree-indent"><span class="tree-chevron"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor"><polyline points="6,3 12,8 6,13"/></svg></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#EAB308" stroke="none"><path d="M2 3.5C2 2.67 2.67 2 3.5 2H6.5L8 4H12.5C13.33 4 14 4.67 14 5.5V6H1V3.5ZM1 7H14V12.5C14 13.33 13.33 14 12.5 14H2.5C1.67 14 1 13.33 1 12.5V7Z"/></svg></div>
+                <span class="tree-name">preload</span>
+              </div>
+
+              <!-- src/preload/index.ts -->
+              <div class="tree-item" style="padding-left: 40px;">
+                <div class="tree-indent"><span class="tree-spacer"></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#60A5FA" stroke="none"><rect x="3" y="2" width="10" height="12" rx="1.5"/><rect x="5" y="1" width="6" height="2" rx="0.5" fill="#3B82F6"/></svg></div>
+                <span class="tree-name">index.ts</span>
+              </div>
+
+              <!-- src/renderer/ expanded -->
+              <div class="tree-item" style="padding-left: 26px;">
+                <div class="tree-indent"><span class="tree-chevron"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor"><polyline points="4,3 10,8 4,13"/></svg></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#EAB308" stroke="none"><path d="M2 3.5C2 2.67 2.67 2 3.5 2H6.5L8 4H12.5C13.33 4 14 4.67 14 5.5V6H1V3.5ZM1 7H14V12.5C14 13.33 13.33 14 12.5 14H2.5C1.67 14 1 13.33 1 12.5V7Z"/></svg></div>
+                <span class="tree-name">renderer</span>
+              </div>
+
+              <!-- src/renderer/App.tsx (active) -->
+              <div class="tree-item active" style="padding-left: 40px;">
+                <div class="tree-indent"><span class="tree-spacer"></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#60A5FA" stroke="none"><rect x="3" y="2" width="10" height="12" rx="1.5"/><rect x="5" y="1" width="6" height="2" rx="0.5" fill="#3B82F6"/></svg></div>
+                <span class="tree-name">App.tsx</span>
+              </div>
+
+              <!-- src/renderer/main.tsx -->
+              <div class="tree-item" style="padding-left: 40px;">
+                <div class="tree-indent"><span class="tree-spacer"></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#60A5FA" stroke="none"><rect x="3" y="2" width="10" height="12" rx="1.5"/><rect x="5" y="1" width="6" height="2" rx="0.5" fill="#3B82F6"/></svg></div>
+                <span class="tree-name">main.tsx</span>
+              </div>
+
+              <!-- src/renderer/index.html -->
+              <div class="tree-item" style="padding-left: 40px;">
+                <div class="tree-indent"><span class="tree-spacer"></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#F97316" stroke="none"><rect x="2" y="1" width="12" height="14" rx="1.5"/><rect x="4" y="4" width="8" height="1.5" rx="0.5" fill="#C2410C"/><rect x="4" y="7" width="6" height="1.5" rx="0.5" fill="#C2410C"/><rect x="4" y="10" width="7" height="1.5" rx="0.5" fill="#C2410C"/></svg></div>
+                <span class="tree-name">index.html</span>
+              </div>
+
+              <!-- src/renderer/components/ collapsed -->
+              <div class="tree-item" style="padding-left: 40px;">
+                <div class="tree-indent"><span class="tree-chevron"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor"><polyline points="6,3 12,8 6,13"/></svg></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#EAB308" stroke="none"><path d="M2 3.5C2 2.67 2.67 2 3.5 2H6.5L8 4H12.5C13.33 4 14 4.67 14 5.5V6H1V3.5ZM1 7H14V12.5C14 13.33 13.33 14 12.5 14H2.5C1.67 14 1 13.33 1 12.5V7Z"/></svg></div>
+                <span class="tree-name">components</span>
+              </div>
+
+              <!-- src/shared/ collapsed -->
+              <div class="tree-item" style="padding-left: 26px;">
+                <div class="tree-indent"><span class="tree-chevron"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor"><polyline points="6,3 12,8 6,13"/></svg></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#EAB308" stroke="none"><path d="M2 3.5C2 2.67 2.67 2 3.5 2H6.5L8 4H12.5C13.33 4 14 4.67 14 5.5V6H1V3.5ZM1 7H14V12.5C14 13.33 13.33 14 12.5 14H2.5C1.67 14 1 13.33 1 12.5V7Z"/></svg></div>
+                <span class="tree-name">shared</span>
+              </div>
+
+              <!-- src/shared/types.ts -->
+              <div class="tree-item" style="padding-left: 40px;">
+                <div class="tree-indent"><span class="tree-spacer"></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#60A5FA" stroke="none"><rect x="3" y="2" width="10" height="12" rx="1.5"/><rect x="5" y="1" width="6" height="2" rx="0.5" fill="#3B82F6"/></svg></div>
+                <span class="tree-name">types.ts</span>
+              </div>
+
+              <!-- extensions/ collapsed -->
+              <div class="tree-item" style="padding-left: 12px;">
+                <div class="tree-indent"><span class="tree-chevron"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor"><polyline points="6,3 12,8 6,13"/></svg></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#EAB308" stroke="none"><path d="M2 3.5C2 2.67 2.67 2 3.5 2H6.5L8 4H12.5C13.33 4 14 4.67 14 5.5V6H1V3.5ZM1 7H14V12.5C14 13.33 13.33 14 12.5 14H2.5C1.67 14 1 13.33 1 12.5V7Z"/></svg></div>
+                <span class="tree-name">extensions</span>
+              </div>
+
+              <!-- package.json -->
+              <div class="tree-item" style="padding-left: 12px;">
+                <div class="tree-indent"><span class="tree-spacer"></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#F59E0B" stroke="none"><circle cx="8" cy="8" r="5.5"/></svg></div>
+                <span class="tree-name">package.json</span>
+              </div>
+
+              <!-- tsconfig.json -->
+              <div class="tree-item" style="padding-left: 12px;">
+                <div class="tree-indent"><span class="tree-spacer"></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#F59E0B" stroke="none"><circle cx="8" cy="8" r="5.5"/></svg></div>
+                <span class="tree-name">tsconfig.json</span>
+              </div>
+
+              <!-- electron.vite.config.js -->
+              <div class="tree-item" style="padding-left: 12px;">
+                <div class="tree-indent"><span class="tree-spacer"></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#63636E" stroke="none"><rect x="3" y="2" width="10" height="12" rx="1.5"/></svg></div>
+                <span class="tree-name">electron.vite.config.js</span>
+              </div>
+
+              <!-- README.md -->
+              <div class="tree-item" style="padding-left: 12px;">
+                <div class="tree-indent"><span class="tree-spacer"></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#94A3B8" stroke="none"><rect x="3" y="2" width="10" height="12" rx="1.5"/><rect x="5" y="1" width="6" height="2" rx="0.5" fill="#64748B"/></svg></div>
+                <span class="tree-name">README.md</span>
+              </div>
+
+              <!-- .gitignore -->
+              <div class="tree-item" style="padding-left: 12px;">
+                <div class="tree-indent"><span class="tree-spacer"></span></div>
+                <div class="tree-icon"><svg viewBox="0 0 16 16" fill="#63636E" stroke="none"><rect x="3" y="2" width="10" height="12" rx="1.5"/></svg></div>
+                <span class="tree-name">.gitignore</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW 2: Dashboard (hidden) -->
+          <div class="sidebar-view sidebar-dashboard-view" id="view-dashboard">
+            <div class="dashboard-header">
+              <div class="explorer-header-left">
+                <svg viewBox="0 0 16 16" fill="none" stroke="var(--brand-primary)" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+                <span>DASHBOARD</span>
+              </div>
+              <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg></button>
+            </div>
+            <div class="dashboard-content">
+              <!-- Stats Grid -->
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <div><span class="stat-value">12</span><span class="stat-badge stat-badge-success">+2 本月</span></div>
+                  <div class="stat-label">活跃项目</div>
+                </div>
+                <div class="stat-card">
+                  <div><span class="stat-value">48</span><span class="stat-badge stat-badge-warning">5 项到期</span></div>
+                  <div class="stat-label">待办任务</div>
+                </div>
+                <div class="stat-card">
+                  <div><span class="stat-value">8</span><span class="stat-badge stat-badge-success">3 在线</span></div>
+                  <div class="stat-label">团队</div>
+                </div>
+                <div class="stat-card">
+                  <div><span class="stat-value">1.2k</span><span class="stat-badge stat-badge-info">+156 本周</span></div>
+                  <div class="stat-label">提交</div>
+                </div>
+              </div>
+
+              <!-- Progress Section -->
+              <div class="dashboard-section">
+                <div class="dashboard-section-label">项目进度</div>
+                <div class="progress-item">
+                  <span class="progress-name">MyCode AI</span>
+                  <span class="progress-pct">78%</span>
+                  <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:78%;background:var(--brand-primary);"></div></div>
+                </div>
+                <div class="progress-item">
+                  <span class="progress-name">Web 前端</span>
+                  <span class="progress-pct">45%</span>
+                  <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:45%;background:var(--color-info);"></div></div>
+                </div>
+                <div class="progress-item">
+                  <span class="progress-name">移动端</span>
+                  <span class="progress-pct">62%</span>
+                  <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:62%;background:var(--color-success);"></div></div>
+                </div>
+                <div class="progress-item">
+                  <span class="progress-name">API 服务</span>
+                  <span class="progress-pct">90%</span>
+                  <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:90%;background:var(--color-warning);"></div></div>
+                </div>
+              </div>
+
+              <!-- Team Section -->
+              <div class="dashboard-section">
+                <div class="dashboard-section-label">团队</div>
+                <div class="team-item"><div class="team-dot team-dot-online"></div><span class="team-name-online">张明</span></div>
+                <div class="team-item"><div class="team-dot team-dot-online"></div><span class="team-name-online">李晓</span></div>
+                <div class="team-item"><div class="team-dot team-dot-online"></div><span class="team-name-online">王芳</span></div>
+                <div class="team-item"><div class="team-dot team-dot-offline"></div><span class="team-name-offline">陈伟</span></div>
+                <div class="team-item"><div class="team-dot team-dot-offline"></div><span class="team-name-offline">赵丽</span></div>
+                <div class="team-item"><div class="team-dot team-dot-offline"></div><span class="team-name-offline">刘洋</span></div>
+                <div class="team-item"><div class="team-dot team-dot-offline"></div><span class="team-name-offline">孙磊</span></div>
+                <div class="team-item"><div class="team-dot team-dot-offline"></div><span class="team-name-offline">周婷</span></div>
+              </div>
+
+              <!-- Model Section -->
+              <div class="dashboard-section">
+                <div class="dashboard-section-label">模型</div>
+                <div class="model-item">
+                  <div class="model-dot" style="background:var(--color-success);"></div>
+                  <span style="color:var(--text-secondary);flex:1;">GPT-4</span>
+                  <span style="font-size:10px;color:var(--color-success);">在线</span>
+                </div>
+                <div class="model-item">
+                  <div class="model-dot" style="background:var(--color-warning);"></div>
+                  <span style="color:var(--text-secondary);flex:1;">CodeLlama</span>
+                  <span style="font-size:10px;color:var(--color-warning);">待机</span>
+                </div>
+                <div class="model-item" style="gap:8px;">
+                  <span style="color:var(--text-muted);font-size:10px;min-width:32px;">Token</span>
+                  <div class="progress-bar-bg" style="flex:1;"><div class="progress-bar-fill" style="width:45%;background:var(--brand-primary);"></div></div>
+                  <span style="font-size:10px;color:var(--text-tertiary);">45.2k/100k</span>
+                </div>
+                <div class="model-item">
+                  <span style="color:var(--text-muted);font-size:10px;min-width:32px;">费用</span>
+                  <span style="font-size:11px;color:var(--text-secondary);font-family:var(--font-mono);">¥234.50</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Editor Area ── -->
+        <div class="editor-area">
+
+          <!-- Tab Bar -->
+          <div class="tab-bar">
+            <div class="editor-tab active">
+              <div class="tab-icon"><svg viewBox="0 0 16 16" fill="none" stroke="#60A5FA" stroke-width="1.2"><rect x="2" y="1" width="12" height="14" rx="1.5"/><rect x="4" y="3" width="8" height="10" rx="0.5" fill="rgba(96,165,250,0.1)"/></svg></div>
+              <span class="tab-name">App.tsx</span>
+              <div class="tab-close"><svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="3" x2="10" y2="10"/><line x1="10" y1="3" x2="3" y2="10"/></svg></div>
+            </div>
+            <div class="editor-tab">
+              <div class="tab-icon"><svg viewBox="0 0 16 16" fill="none" stroke="#63636E" stroke-width="1.2"><rect x="2" y="1" width="12" height="14" rx="1.5"/><rect x="4" y="3" width="8" height="10" rx="0.5" fill="rgba(99,99,110,0.1)"/></svg></div>
+              <span class="tab-name">main.tsx</span>
+              <div class="tab-close"><svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="3" x2="10" y2="10"/><line x1="10" y1="3" x2="3" y2="10"/></svg></div>
+            </div>
+            <div class="editor-tab modified">
+              <div class="tab-dot"></div>
+              <div class="tab-icon"><svg viewBox="0 0 16 16" fill="none" stroke="#63636E" stroke-width="1.2"><rect x="2" y="1" width="12" height="14" rx="1.5"/><rect x="4" y="3" width="8" height="10" rx="0.5" fill="rgba(99,99,110,0.1)"/></svg></div>
+              <span class="tab-name">useStore.ts</span>
+              <div class="tab-close"><svg viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="3" x2="10" y2="10"/><line x1="10" y1="3" x2="3" y2="10"/></svg></div>
+            </div>
+          </div>
+
+          <!-- Breadcrumbs -->
+          <div class="breadcrumbs">
+            <span>src</span>
+            <span class="breadcrumb-sep">›</span>
+            <span>renderer</span>
+            <span class="breadcrumb-sep">›</span>
+            <span style="color:var(--text-secondary);">App.tsx</span>
+          </div>
+
+          <!-- Code Editor -->
+          <div class="code-editor">
+            <div class="code-line"><div class="code-gutter">1</div><div class="code-content"><span class="syn-keyword">import</span><span class="syn-text"> React, { </span><span class="syn-blue">useState</span><span class="syn-text">, </span><span class="syn-blue">useCallback</span><span class="syn-text"> } </span><span class="syn-keyword">from</span><span class="syn-text"> </span><span class="syn-string">'react'</span><span class="syn-punct">;</span></div></div>
+            <div class="code-line"><div class="code-gutter">2</div><div class="code-content"><span class="syn-keyword">import</span><span class="syn-text"> { </span><span class="syn-blue">useStore</span><span class="syn-text"> } </span><span class="syn-keyword">from</span><span class="syn-text"> </span><span class="syn-string">'./store/useStore'</span><span class="syn-punct">;</span></div></div>
+            <div class="code-line"><div class="code-gutter">3</div><div class="code-content"><span class="syn-keyword">import</span><span class="syn-text"> </span><span class="syn-blue">ActivityBar</span><span class="syn-text"> </span><span class="syn-keyword">from</span><span class="syn-text"> </span><span class="syn-string">'./components/layout/ActivityBar'</span><span class="syn-punct">;</span></div></div>
+            <div class="code-line"><div class="code-gutter">4</div><div class="code-content"><span class="syn-keyword">import</span><span class="syn-text"> </span><span class="syn-blue">Sidebar</span><span class="syn-text"> </span><span class="syn-keyword">from</span><span class="syn-text"> </span><span class="syn-string">'./components/layout/Sidebar'</span><span class="syn-punct">;</span></div></div>
+            <div class="code-line"><div class="code-gutter">5</div><div class="code-content"><span class="syn-keyword">import</span><span class="syn-text"> </span><span class="syn-blue">Editor</span><span class="syn-text"> </span><span class="syn-keyword">from</span><span class="syn-text"> </span><span class="syn-string">'./components/layout/Editor'</span><span class="syn-punct">;</span></div></div>
+            <div class="code-line"><div class="code-gutter">6</div><div class="code-content"><span class="syn-keyword">import</span><span class="syn-text"> </span><span class="syn-blue">StatusBar</span><span class="syn-text"> </span><span class="syn-keyword">from</span><span class="syn-text"> </span><span class="syn-string">'./components/layout/StatusBar'</span><span class="syn-punct">;</span></div></div>
+            <div class="code-line"><div class="code-gutter">7</div><div class="code-content"></div></div>
+            <div class="code-line active"><div class="code-gutter">8</div><div class="code-content"><span class="syn-keyword">const</span><span class="syn-text"> </span><span class="syn-amber">App</span><span class="syn-punct">:</span><span class="syn-text"> </span><span class="syn-blue">React</span><span class="syn-punct">.</span><span class="syn-blue">FC</span><span class="syn-text"> </span><span class="syn-punct">=</span><span class="syn-text"> </span><span class="syn-punct">()</span><span class="syn-text"> </span><span class="syn-keyword">=></span><span class="syn-text"> </span><span class="syn-punct">{</span></div></div>
+            <div class="code-line"><div class="code-gutter">9</div><div class="code-content"><span class="syn-text">  </span><span class="syn-keyword">const</span><span class="syn-text"> { sidebarWidth, activeTabId } </span><span class="syn-punct">=</span><span class="syn-text"> </span><span class="syn-blue">useStore</span><span class="syn-punct">();</span></div></div>
+            <div class="code-line"><div class="code-gutter">10</div><div class="code-content"><span class="syn-text">  </span><span class="syn-keyword">const</span><span class="syn-text"> [isReady, </span><span class="syn-amber">setIsReady</span><span class="syn-text">] </span><span class="syn-punct">=</span><span class="syn-text"> </span><span class="syn-blue">useState</span><span class="syn-punct">(</span><span class="syn-keyword">false</span><span class="syn-punct">);</span></div></div>
+            <div class="code-line"><div class="code-gutter">11</div><div class="code-content"></div></div>
+            <div class="code-line"><div class="code-gutter">12</div><div class="code-content"><span class="syn-text">  </span><span class="syn-keyword">const</span><span class="syn-text"> </span><span class="syn-amber">handleToggle</span><span class="syn-text"> </span><span class="syn-punct">=</span><span class="syn-text"> </span><span class="syn-blue">useCallback</span><span class="syn-punct">(() => {</span></div></div>
+            <div class="code-line"><div class="code-gutter">13</div><div class="code-content"><span class="syn-text">    </span><span class="syn-amber">setIsReady</span><span class="syn-punct">(</span><span class="syn-amber">prev</span><span class="syn-text"> </span><span class="syn-keyword">=></span><span class="syn-text"> </span><span class="syn-punct">!</span><span class="syn-amber">prev</span><span class="syn-punct">);</span></div></div>
+            <div class="code-line"><div class="code-gutter">14</div><div class="code-content"><span class="syn-text">  }, []);</span></div></div>
+          </div>
+
+          <!-- Resize Handle -->
+          <div class="resize-handle"></div>
+
+          <!-- Bottom Panel -->
+          <div class="bottom-panel">
+            <div class="bottom-content">
+              <!-- Left: Problems -->
+              <div class="bottom-half bottom-left">
+                <div class="panel-tabs">
+                  <div class="panel-tab active">
+                    问题
+                    <span class="panel-badge">3</span>
+                  </div>
+                  <div class="panel-tab">输出</div>
+                  <div class="panel-tab">终端</div>
+                  <div class="panel-tab">调试</div>
+                  <div class="panel-tab">Git</div>
+                </div>
+                <div class="problems-list">
+                  <div class="problem-item">
+                    <div class="problem-icon" style="color:var(--color-warning);">&#9888;</div>
+                    <div class="problem-desc">'theme' is defined but never used</div>
+                    <div class="problem-file">App.tsx</div>
+                    <div class="problem-line">Ln 8</div>
+                  </div>
+                  <div class="problem-item">
+                    <div class="problem-icon" style="color:var(--color-warning);">&#9888;</div>
+                    <div class="problem-desc">Unexpected any type</div>
+                    <div class="problem-file">useStore.ts</div>
+                    <div class="problem-line">Ln 23</div>
+                  </div>
+                  <div class="problem-item">
+                    <div class="problem-icon" style="color:var(--color-warning);">&#9888;</div>
+                    <div class="problem-desc">React.FC is deprecated</div>
+                    <div class="problem-file">App.tsx</div>
+                    <div class="problem-line">Ln 8</div>
+                  </div>
+                  <div class="problem-item">
+                    <div class="problem-icon" style="color:var(--color-info);">&#8505;</div>
+                    <div class="problem-desc">Consider optional chaining</div>
+                    <div class="problem-file">Sidebar.tsx</div>
+                    <div class="problem-line">Ln 45</div>
+                  </div>
+                  <div class="problem-item">
+                    <div class="problem-icon" style="color:var(--color-info);">&#8505;</div>
+                    <div class="problem-desc">Unused import</div>
+                    <div class="problem-file">App.tsx</div>
+                    <div class="problem-line">Ln 1</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right: Terminal -->
+              <div class="bottom-half">
+                <div class="panel-tabs">
+                  <div class="panel-tab active">终端</div>
+                  <div class="panel-tab">问题</div>
+                  <div class="panel-tab">输出</div>
+                  <span class="panel-terminal-label">bash <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+                </div>
+                <div class="terminal-content">
+                  <div class="term-line"><span class="term-green">&#10140;</span> <span class="term-blue">~/mycode-ai</span> <span class="term-white">npm run dev</span></div>
+                  <div class="term-line">&nbsp;</div>
+                  <div class="term-line"><span class="term-tertiary">> mycode-ai@1.0.0 dev</span></div>
+                  <div class="term-line"><span class="term-tertiary">> electron-vite dev</span></div>
+                  <div class="term-line">&nbsp;</div>
+                  <div class="term-line"><span class="term-green">&#10003; built in 586ms</span></div>
+                  <div class="term-line">&nbsp;</div>
+                  <div class="term-line"><span class="term-blue">&#10140; Local: http://localhost:5173/</span></div>
+                  <div class="term-line"><span class="term-green">[Window] App loaded successfully</span></div>
+                  <div class="term-line"><span class="term-cursor"></span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── AI Chat Panel ── -->
+        <div class="ai-chat">
+          <div class="ai-header">
+            <div class="ai-sparkle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2L9.5 8.5L3 12L9.5 15.5L12 22L14.5 15.5L21 12L14.5 8.5L12 2Z"/><path d="M12 8V16"/><path d="M8 12H16"/></svg></div>
+            <span class="ai-title">AI 助手</span>
+            <div class="ai-header-dot"></div>
+          </div>
+
+          <div class="ai-messages">
+            <!-- AI Message 1 -->
+            <div class="ai-msg">
+              <div class="ai-msg-avatar ai-avatar-bot">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2L9.5 8.5L3 12L9.5 15.5L12 22L14.5 15.5L21 12L14.5 8.5L12 2Z"/></svg>
+              </div>
+              <div class="ai-bubble ai-bubble-bot">分析了项目结构。这是 Electron + React + TypeScript 应用。<br>3 个优化建议：<br>1. 使用虚拟滚动<br>2. 拆分 reducer<br>3. 添加快捷键系统</div>
+            </div>
+
+            <!-- User Message -->
+            <div class="ai-msg" style="justify-content:flex-end;">
+              <div class="ai-bubble ai-bubble-user">先实现虚拟滚动</div>
+              <div class="ai-msg-avatar ai-avatar-user">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+            </div>
+
+            <!-- AI Typing -->
+            <div class="ai-msg">
+              <div class="ai-msg-avatar ai-avatar-bot">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2L9.5 8.5L3 12L9.5 15.5L12 22L14.5 15.5L21 12L14.5 8.5L12 2Z"/></svg>
+              </div>
+              <div class="ai-bubble ai-bubble-typing">
+                <div class="typing-dot dot-bounce-1"></div>
+                <div class="typing-dot dot-bounce-2"></div>
+                <div class="typing-dot dot-bounce-3"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ai-input-area">
+            <div class="ai-input-container">
+              <textarea rows="1" placeholder="输入消息..."></textarea>
+              <div class="ai-attach"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></div>
+              <button class="ai-send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /main-row -->
+
+      <!-- ═══ STATUS BAR ═══ -->
+      <div class="status-bar">
+        <div class="status-left">
+          <div class="status-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9C18 9 14 12 6 15"/></svg>
+            <span class="status-text">main</span>
+          </div>
+          <div class="status-item">
+            <div class="status-dot" style="background:var(--color-success);"></div>
+            <span class="status-text">已同步</span>
+          </div>
+          <div class="status-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-warning)" stroke-width="1.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span class="status-text">3</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-success)" stroke-width="1.5" style="margin-left:4px;"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span class="status-text">0</span>
+          </div>
+        </div>
+        <div class="status-right">
+          <div class="status-item"><span class="status-mono">Ln 8, Col 34</span></div>
+          <div class="status-item"><span class="status-text">空格: 2</span></div>
+          <div class="status-item"><span class="status-text">UTF-8</span></div>
+          <div class="status-item"><span class="status-text">TypeScript React</span></div>
+          <div class="status-item"><span class="status-text">Prettier</span></div>
+          <div class="status-item status-brand"><span style="font-size:10px;">&#10022;</span> MyCode AI</div>
+        </div>
+      </div>
+
+    </main>
+
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+
+      /* ── Custom Scrollbar ── */
+      ::-webkit-scrollbar { width: 5px; height: 5px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.14); }
+
+      /* ── Animations ── */
+      @keyframes blink-cursor {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+      }
+      @keyframes bounce-dot {
+        0%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-5px); }
+      }
+      @keyframes pulse-dot {
+        0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(52,211,153,0.5); }
+        50% { opacity: 0.7; box-shadow: 0 0 0 4px rgba(52,211,153,0); }
+      }
+      .cursor-blink { animation: blink-cursor 1s step-end infinite; }
+      .dot-bounce-1 { animation: bounce-dot 1.4s infinite ease-in-out; animation-delay: 0s; }
+      .dot-bounce-2 { animation: bounce-dot 1.4s infinite ease-in-out; animation-delay: 0.2s; }
+      .dot-bounce-3 { animation: bounce-dot 1.4s infinite ease-in-out; animation-delay: 0.4s; }
+      .pulse-green { animation: pulse-dot 2s infinite ease-in-out; }
+
+      /* ── Base Reset ── */
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { height: 100vh; overflow: hidden; font-family: var(--font-body); background: var(--surface-0); color: var(--text-primary); }
+
+      /* ── IDE Grid Layout ── */
+      #ide-root { display: flex; flex-direction: column; width: 100vw; height: 100vh; }
+
+      /* ── Title Bar ── */
+      .title-bar {
+        height: 28px; min-height: 28px; display: flex; align-items: center; justify-content: space-between;
+        background: var(--surface-0); border-bottom: 1px solid var(--border-subtle); padding: 0 12px;
+        -webkit-app-region: drag; user-select: none;
+      }
+      .traffic-lights { display: flex; gap: 6px; align-items: center; }
+      .traffic-light { width: 11px; height: 11px; border-radius: 50%; }
+      .tl-red { background: #FF5F57; }
+      .tl-yellow { background: #FEBC2E; }
+      .tl-green { background: #28C840; }
+      .title-text { font-size: 12px; color: var(--text-tertiary); font-family: var(--font-body); }
+      .title-controls { display: flex; gap: 8px; align-items: center; -webkit-app-region: no-drag; }
+      .title-controls button {
+        width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;
+        background: none; border: none; color: var(--text-muted); cursor: pointer;
+      }
+      .title-controls button:hover { color: var(--text-secondary); }
+
+      /* ── Main Row ── */
+      .main-row { display: flex; flex: 1; overflow: hidden; }
+
+      /* ── Activity Bar ── */
+      .activity-bar {
+        width: 48px; min-width: 48px; display: flex; flex-direction: column; align-items: center;
+        background: var(--surface-0); border-right: 1px solid var(--border-subtle);
+        padding-top: 6px; gap: 2px;
+      }
+      .activity-top { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+      .activity-sep { width: 20px; height: 1px; background: var(--border-subtle); margin: 6px 0; }
+      .activity-bottom { display: flex; flex-direction: column; align-items: center; gap: 2px; margin-top: auto; margin-bottom: 6px; }
+      .activity-icon {
+        position: relative; width: 48px; height: 32px; display: flex; align-items: center; justify-content: center;
+        color: var(--text-tertiary); cursor: pointer; transition: color var(--duration-fast);
+      }
+      .activity-icon:hover { color: var(--text-primary); background: rgba(255,255,255,0.03); }
+      .activity-icon.active { color: var(--brand-primary); }
+      .activity-icon.active::before {
+        content: ''; position: absolute; left: 0; top: 6px; width: 3px; height: 20px;
+        background: var(--brand-primary); border-radius: 0 2px 2px 0;
+        box-shadow: 0 0 6px rgba(108,92,231,0.4);
+      }
+      .activity-icon svg { width: 20px; height: 20px; stroke-width: 1.5; }
+      .badge-count {
+        position: absolute; top: 2px; right: 6px; min-width: 14px; height: 14px;
+        background: var(--color-error); color: #fff; font-size: 9px; font-weight: 700;
+        border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center;
+        padding: 0 3px; line-height: 1;
+      }
+      .ai-dot {
+        position: absolute; top: 4px; right: 8px; width: 6px; height: 6px;
+        background: var(--color-success); border-radius: 50%;
+        animation: pulse-dot 2s infinite ease-in-out;
+      }
+      .user-avatar {
+        width: 20px; height: 20px; border-radius: 50%; background: var(--surface-3);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 10px; color: var(--text-secondary); cursor: pointer;
+      }
+      .user-avatar:hover { background: var(--surface-4); }
+
+      /* ── Sidebar ── */
+      .sidebar {
+        width: 250px; min-width: 250px; display: flex; flex-direction: column;
+        background: var(--surface-1); border-right: 1px solid var(--border-subtle); position: relative;
+      }
+      .sidebar-tabs {
+        display: flex; height: 32px; min-height: 32px; border-bottom: 1px solid var(--border-subtle);
+      }
+      .sidebar-tab {
+        flex: 1; display: flex; align-items: center; justify-content: center;
+        font-size: 11px; color: var(--text-tertiary); cursor: pointer; transition: all var(--duration-fast);
+        border-bottom: 1px solid transparent; position: relative; user-select: none;
+      }
+      .sidebar-tab:hover { color: var(--text-secondary); background: rgba(255,255,255,0.02); }
+      .sidebar-tab.active { color: var(--text-primary); border-bottom-color: var(--brand-primary); }
+
+      /* ── Sidebar Views (stacked, toggled via CSS) ── */
+      .sidebar-view { position: absolute; top: 32px; left: 0; right: 0; bottom: 0; display: none; flex-direction: column; }
+      .sidebar-view.visible { display: flex; }
+
+      /* ── Explorer Header ── */
+      .explorer-header {
+        height: 32px; min-height: 32px; display: flex; align-items: center; justify-content: space-between;
+        padding: 0 12px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+        color: var(--text-tertiary);
+      }
+      .explorer-header-left { display: flex; align-items: center; gap: 4px; }
+      .explorer-header-left svg { width: 14px; height: 14px; stroke: var(--brand-primary); fill: none; stroke-width: 1.5; }
+      .explorer-header-actions { display: flex; gap: 4px; }
+      .explorer-header-actions button {
+        width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;
+        background: none; border: none; color: var(--text-muted); cursor: pointer;
+      }
+      .explorer-header-actions button:hover { color: var(--text-secondary); }
+
+      /* ── File Tree ── */
+      .file-tree { flex: 1; overflow-y: auto; padding-bottom: 8px; }
+      .tree-section-label {
+        font-size: 10px; text-transform: uppercase; color: var(--text-muted);
+        padding: 6px 16px 2px; letter-spacing: 0.5px;
+      }
+      .tree-item {
+        height: 26px; display: flex; align-items: center; padding-right: 8px;
+        cursor: pointer; transition: background var(--duration-fast); font-size: 12px;
+        color: var(--text-secondary); white-space: nowrap; user-select: none;
+      }
+      .tree-item:hover { background: rgba(255,255,255,0.03); }
+      .tree-item.active { background: var(--brand-primary-muted); color: var(--text-primary); }
+      .tree-indent { display: inline-flex; }
+      .tree-spacer { width: 14px; flex-shrink: 0; }
+      .tree-chevron {
+        width: 12px; height: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+        color: var(--text-muted); margin-right: 2px;
+      }
+      .tree-chevron svg { width: 12px; height: 12px; stroke-width: 1.5; }
+      .tree-icon { width: 14px; height: 14px; flex-shrink: 0; margin-right: 4px; display: flex; align-items: center; }
+      .tree-icon svg { width: 14px; height: 14px; stroke-width: 1.5; }
+      .tree-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+      /* ── Dashboard View ── */
+      .dashboard-header {
+        height: 32px; min-height: 32px; display: flex; align-items: center; justify-content: space-between;
+        padding: 0 12px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+        color: var(--text-tertiary);
+      }
+      .dashboard-content { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 0; }
+      .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+      .stat-card {
+        background: var(--surface-2); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+        padding: 8px 10px;
+      }
+      .stat-value { font-size: 16px; font-weight: 700; font-family: var(--font-mono); color: var(--text-primary); }
+      .stat-label { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+      .stat-badge { font-size: 9px; margin-left: 6px; }
+      .stat-badge-success { color: var(--color-success); }
+      .stat-badge-warning { color: var(--color-warning); }
+      .stat-badge-info { color: var(--color-info); }
+
+      .dashboard-section { margin-top: 10px; }
+      .dashboard-section-label {
+        font-size: 9px; text-transform: uppercase; color: var(--text-muted);
+        letter-spacing: 1px; margin-bottom: 6px; font-weight: 500;
+      }
+      .progress-item { height: 32px; display: flex; align-items: center; gap: 6px; }
+      .progress-name { flex: 1; font-size: 11px; color: var(--text-secondary); }
+      .progress-pct { font-size: 10px; color: var(--text-tertiary); min-width: 28px; text-align: right; }
+      .progress-bar-bg { width: 48px; height: 3px; background: var(--surface-4); border-radius: var(--radius-full); overflow: hidden; }
+      .progress-bar-fill { height: 100%; border-radius: var(--radius-full); }
+
+      .team-item { height: 22px; display: flex; align-items: center; gap: 6px; font-size: 11px; }
+      .team-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+      .team-dot-online { background: var(--color-success); }
+      .team-dot-offline { background: var(--text-muted); }
+      .team-name-online { color: var(--text-secondary); }
+      .team-name-offline { color: var(--text-muted); }
+
+      .model-item { height: 22px; display: flex; align-items: center; gap: 6px; font-size: 11px; }
+      .model-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+
+      /* ── Editor Area ── */
+      .editor-area { flex: 1; display: flex; flex-direction: column; background: var(--surface-0); overflow: hidden; }
+
+      /* ── Tab Bar ── */
+      .tab-bar {
+        height: 36px; min-height: 36px; display: flex; align-items: stretch;
+        background: var(--surface-1); border-bottom: 1px solid var(--border-subtle); overflow-x: auto;
+      }
+      .editor-tab {
+        height: 36px; display: flex; align-items: center; gap: 6px; padding: 0 12px;
+        border-right: 1px solid var(--border-subtle); cursor: pointer; position: relative;
+        font-size: 12px; color: var(--text-tertiary); white-space: nowrap; min-width: 0;
+        transition: background var(--duration-fast);
+      }
+      .editor-tab:hover { background: rgba(255,255,255,0.02); }
+      .editor-tab:hover .tab-close { opacity: 0.4; }
+      .editor-tab.active {
+        background: var(--surface-0); color: var(--text-primary);
+        border-top: 2px solid var(--brand-primary);
+      }
+      .editor-tab.modified .tab-close { opacity: 0.7; }
+      .tab-icon { width: 13px; height: 13px; flex-shrink: 0; display: flex; align-items: center; }
+      .tab-icon svg { width: 13px; height: 13px; stroke-width: 1.5; }
+      .tab-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .tab-dot { width: 4px; height: 4px; border-radius: 50%; background: white; flex-shrink: 0; }
+      .tab-close {
+        width: 13px; height: 13px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+        border-radius: var(--radius-sm); opacity: 0; transition: all var(--duration-fast);
+        color: var(--text-tertiary);
+      }
+      .tab-close:hover { opacity: 1 !important; background: var(--surface-3); }
+
+      /* ── Breadcrumbs ── */
+      .breadcrumbs {
+        height: 22px; min-height: 22px; display: flex; align-items: center; gap: 4px;
+        padding: 0 16px; background: var(--surface-0); border-bottom: 1px solid var(--border-subtle);
+        font-size: 11px; color: var(--text-muted); font-family: var(--font-body);
+      }
+      .breadcrumbs span:hover { color: var(--text-secondary); cursor: pointer; }
+      .breadcrumb-sep { color: var(--text-muted); font-size: 10px; }
+
+      /* ── Code Editor ── */
+      .code-editor { flex: 1; overflow-y: auto; background: var(--surface-0); font-family: var(--font-mono); font-size: 13px; line-height: 22px; }
+      .code-line { display: flex; height: 22px; }
+      .code-line.active { background: rgba(255,255,255,0.03); }
+      .code-gutter {
+        width: 52px; min-width: 52px; text-align: right; padding-right: 12px;
+        color: var(--text-muted); font-size: 12px; user-select: none; flex-shrink: 0;
+      }
+      .code-content { flex: 1; white-space: pre; overflow-x: auto; }
+
+      /* ── Syntax Colors ── */
+      .syn-keyword { color: #C084FC; }
+      .syn-blue { color: #60A5FA; }
+      .syn-string { color: #34D399; }
+      .syn-amber { color: #FBBF24; }
+      .syn-punct { color: #71717A; }
+      .syn-text { color: #D4D4D8; }
+
+      /* ── Resize Handle ── */
+      .resize-handle {
+        height: 3px; min-height: 3px; background: var(--surface-3); cursor: row-resize;
+        transition: background var(--duration-fast);
+      }
+      .resize-handle:hover { background: var(--brand-primary); }
+
+      /* ── Bottom Panel ── */
+      .bottom-panel {
+        height: 220px; min-height: 220px; display: flex; flex-direction: column;
+        background: var(--surface-1); border-top: 1px solid var(--border-subtle);
+      }
+      .bottom-content { flex: 1; display: flex; overflow: hidden; }
+      .bottom-half { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+      .bottom-left { border-right: 1px solid var(--border-subtle); }
+
+      /* ── Panel Tabs ── */
+      .panel-tabs {
+        height: 28px; min-height: 28px; display: flex; align-items: stretch;
+        border-bottom: 1px solid var(--border-subtle); overflow-x: auto;
+      }
+      .panel-tab {
+        height: 28px; display: flex; align-items: center; gap: 4px; padding: 0 10px;
+        font-size: 11px; color: var(--text-tertiary); cursor: pointer; position: relative;
+        white-space: nowrap; transition: color var(--duration-fast);
+      }
+      .panel-tab:hover { color: var(--text-secondary); }
+      .panel-tab.active { color: var(--text-primary); }
+      .panel-tab.active::after {
+        content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+        background: var(--brand-primary);
+      }
+      .panel-badge {
+        min-width: 12px; height: 12px; padding: 0 3px; border-radius: var(--radius-full);
+        background: var(--surface-3); color: var(--text-muted); font-size: 9px;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .panel-terminal-label {
+        font-size: 10px; color: var(--text-muted); margin-left: auto; display: flex;
+        align-items: center; gap: 4px;
+      }
+
+      /* ── Problems List ── */
+      .problems-list { flex: 1; overflow-y: auto; }
+      .problem-item {
+        height: 26px; display: flex; align-items: center; gap: 6px; padding: 0 12px;
+        font-size: 11px; cursor: pointer; transition: background var(--duration-fast);
+      }
+      .problem-item:hover { background: rgba(255,255,255,0.02); }
+      .problem-icon { font-size: 13px; flex-shrink: 0; width: 16px; text-align: center; }
+      .problem-desc { flex: 1; font-family: var(--font-body); color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .problem-file { font-family: var(--font-mono); color: var(--text-tertiary); font-size: 10px; flex-shrink: 0; }
+      .problem-line { color: var(--text-muted); font-size: 10px; flex-shrink: 0; }
+
+      /* ── Terminal ── */
+      .terminal-content {
+        flex: 1; overflow-y: auto; background: var(--surface-0); padding: 8px 12px;
+        font-family: var(--font-mono); font-size: 11px; line-height: 18px;
+      }
+      .term-line { white-space: pre-wrap; }
+      .term-green { color: var(--color-success); }
+      .term-blue { color: var(--color-info); }
+      .term-white { color: var(--text-primary); }
+      .term-tertiary { color: var(--text-tertiary); }
+      .term-cursor {
+        display: inline-block; width: 8px; height: 16px; background: var(--surface-4);
+        vertical-align: text-bottom; animation: blink-cursor 1s step-end infinite;
+      }
+
+      /* ── AI Chat Panel ── */
+      .ai-chat {
+        width: 280px; min-width: 280px; display: flex; flex-direction: column;
+        background: var(--surface-1); border-left: 1px solid var(--border-subtle);
+      }
+      .ai-header {
+        height: 34px; min-height: 34px; display: flex; align-items: center; gap: 6px;
+        padding: 0 12px; border-bottom: 1px solid var(--border-subtle);
+      }
+      .ai-sparkle { width: 13px; height: 13px; color: var(--brand-primary); }
+      .ai-sparkle svg { width: 13px; height: 13px; stroke-width: 1.5; }
+      .ai-title { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+      .ai-header-dot {
+        width: 5px; height: 5px; border-radius: 50%; background: var(--color-success);
+        animation: pulse-dot 2s infinite ease-in-out;
+        box-shadow: 0 0 4px rgba(52,211,153,0.5);
+      }
+
+      .ai-messages { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 10px; }
+
+      .ai-msg { display: flex; gap: 6px; }
+      .ai-msg-avatar {
+        width: 22px; height: 22px; min-width: 22px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      }
+      .ai-avatar-bot { background: var(--brand-primary); }
+      .ai-avatar-bot svg { width: 11px; height: 11px; stroke: white; fill: none; stroke-width: 1.5; }
+      .ai-avatar-user { background: var(--surface-4); }
+      .ai-avatar-user svg { width: 11px; height: 11px; stroke: var(--text-secondary); fill: none; stroke-width: 1.5; }
+
+      .ai-bubble {
+        padding: 8px 10px; font-size: 11px; line-height: 1.6; max-width: calc(100% - 34px);
+        word-break: break-word;
+      }
+      .ai-bubble-bot {
+        background: var(--surface-2); border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-lg); border-top-left-radius: 2px; color: var(--text-secondary);
+      }
+      .ai-bubble-user {
+        background: var(--brand-primary-muted); border: 1px solid rgba(108,92,231,0.15);
+        border-radius: var(--radius-lg); border-top-right-radius: 2px; color: var(--text-primary);
+      }
+      .ai-bubble-typing {
+        background: var(--surface-2); border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-lg); border-top-left-radius: 2px; padding: 10px 12px;
+        display: flex; gap: 4px; align-items: center;
+      }
+      .typing-dot {
+        width: 5px; height: 5px; border-radius: 50%; background: var(--brand-primary);
+      }
+
+      /* ── AI Input ── */
+      .ai-input-area { border-top: 1px solid var(--border-subtle); padding: 6px 8px; }
+      .ai-input-container {
+        background: var(--surface-2); border: 1px solid var(--border-default);
+        border-radius: var(--radius-lg); padding: 4px 6px; display: flex; align-items: center; gap: 6px;
+        transition: all var(--duration-fast);
+      }
+      .ai-input-container:focus-within {
+        border-color: var(--brand-primary);
+        box-shadow: 0 0 0 2px var(--brand-primary-muted);
+      }
+      .ai-input-container textarea {
+        flex: 1; background: transparent; border: none; outline: none; resize: none;
+        color: var(--text-primary); font-size: 11px; font-family: var(--font-body);
+        line-height: 1.4; padding: 2px 0; min-height: 16px;
+      }
+      .ai-input-container textarea::placeholder { color: var(--text-muted); }
+      .ai-attach {
+        width: 13px; height: 13px; color: var(--text-muted); cursor: pointer; flex-shrink: 0;
+        transition: color var(--duration-fast);
+      }
+      .ai-attach:hover { color: var(--text-secondary); }
+      .ai-attach svg { width: 13px; height: 13px; stroke-width: 1.5; }
+      .ai-send {
+        width: 24px; height: 24px; min-width: 24px; border-radius: 50%;
+        background: var(--brand-primary); border: none; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        transition: background var(--duration-fast);
+      }
+      .ai-send:hover { background: var(--brand-primary-hover); }
+      .ai-send svg { width: 11px; height: 11px; stroke: white; fill: none; stroke-width: 2; }
+
+      /* ── Status Bar ── */
+      .status-bar {
+        height: 22px; min-height: 22px; display: flex; align-items: center; justify-content: space-between;
+        background: var(--surface-0); border-top: 1px solid var(--border-subtle);
+        font-size: 11px; color: var(--text-secondary); user-select: none;
+      }
+      .status-left, .status-right { display: flex; align-items: center; height: 22px; }
+      .status-item {
+        height: 22px; display: flex; align-items: center; gap: 4px; padding: 0 8px;
+        cursor: default; transition: background var(--duration-fast);
+      }
+      .status-item:hover { background: rgba(255,255,255,0.04); }
+      .status-item svg { width: 11px; height: 11px; }
+      .status-item .status-dot { width: 5px; height: 5px; border-radius: 50%; }
+      .status-item .status-text { font-family: var(--font-body); font-size: 11px; }
+      .status-item .status-mono { font-family: var(--font-mono); font-size: 11px; }
+      .status-brand {
+        background: var(--surface-3); color: var(--brand-primary); padding: 0 10px;
+        font-size: 11px; font-weight: 500; margin-right: -2px; border-radius: 0;
+        display: flex; align-items: center; gap: 3px;
+      }
+      .status-brand:hover { background: rgba(255,255,255,0.06); }
+    </style>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

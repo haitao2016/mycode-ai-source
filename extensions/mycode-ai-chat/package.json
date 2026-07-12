@@ -1,0 +1,58 @@
+{
+  "name": "mycode-ai-chat",
+  "displayName": "MyCode AI Chat",
+  "description": "AI-powered chat for MyCode - talk to your code, get explanations, and generate code",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": ["AI", "Chat"],
+  "activationEvents": ["onCommand:mycode-ai.chat.focus", "onView:mycode-ai.chat"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "views": {
+      "activitybar": [
+        {
+          "id": "mycode-ai.chat",
+          "name": "AI Chat",
+          "icon": "$(message-square)",
+          "type": "webview"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "mycode-ai.chat.focus",
+        "title": "Focus AI Chat",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.chat.clear",
+        "title": "Clear Chat",
+        "category": "MyCode AI"
+      },
+      {
+        "command": "mycode-ai.chat.askSelection",
+        "title": "Ask about Selection",
+        "category": "MyCode AI"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "mycode-ai.chat.askSelection",
+          "group": "MyCode AI@1"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -p ./ --watch",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}
