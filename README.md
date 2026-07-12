@@ -1,78 +1,62 @@
-# MyCode-AI
+# MyCode AI — VS Code Extension
 
-AI-powered IDE based on Code-OSS (VS Code open source).
-
-## Architecture
-
-MyCode-AI is built as a VS Code extension collection that injects into Code-OSS, providing AI-powered coding assistance through native VS Code APIs.
-
-```
-mycode-ai/
-├── extensions/
-│   └── mycode-ai-core/       # Core VS Code extension
-│       ├── src/
-│       │   ├── extension.ts  # Extension entry point
-│       │   ├── panels/       # Webview View providers
-│       │   ├── commands/     # VS Code commands
-│       │   └── services/     # Business logic
-│       └── package.json      # Extension manifest
-├── scripts/
-│   └── inject-into-code-oss.js  # Build & inject script
-└── src/renderer/services/    # Legacy services (deprecated)
-```
-
-## Prerequisites
-
-- [Code-OSS](https://github.com/microsoft/vscode) source code
-- Node.js >= 18
-- npm or yarn
-
-## Build
-
-```bash
-# Install dependencies
-npm install
-
-# Build extension
-npm run build:ext
-
-# Inject into Code-OSS
-npm run inject
-
-# Or build everything
-npm run build
-```
-
-## Development
-
-```bash
-# Watch extension changes
-npm run build:ext:watch
-```
+AI-powered coding assistant: chat, agent, completion, review, debug, git, LSP & tasks — all inside VS Code.
 
 ## Features
 
-- **AI Chat** - Webview View sidebar for AI-powered conversations
-- **Code Generation** - Generate code from natural language descriptions
-- **Code Review** - AI-powered code review and suggestions
-- **Plan Management** - Development plan and milestone tracking
-- **Skills** - ClawHub skill marketplace integration
-
-## Extension Commands
-
-| Command | Description |
+| Feature | Description |
 |---------|-------------|
-| `MyCode-AI: Open AI Chat` | Open AI chat sidebar |
-| `MyCode-AI: Generate Code` | Generate code from selection |
-| `MyCode-AI: Explain Code` | Explain selected code |
-| `MyCode-AI: Review Code` | Review selected code |
-| `MyCode-AI: Toggle` | Enable/disable MyCode-AI |
+| **AI Chat** 💬 | Chat with AI in the sidebar |
+| **AI Agent** 🤖 | Autonomous multi-step coding agent |
+| **Code Completion** ✨ | AI-powered inline suggestions |
+| **Code Review** 👁️ | Review files or workspace for issues |
+| **Generate Docs** 📝 | Auto-generate documentation |
+| **Refactor** 🔧 | AI-suggested improvements |
+| **Debug Assistant** 🐛 | AI error analysis |
+| **Git Control** 🌿 | Commit, push, pull from sidebar |
+| **LSP Integration** 📡 | Language server management |
+| **Task Runner** ⚡ | Build, test, clean commands |
+| **Search** 🔍 | Global, symbol, file search |
 
-## Configuration
+## Quick Start
 
-| Setting | Type | Default | Description |
-|---------|------|---------|-------------|
-| `mycode-ai.enabled` | boolean | true | Enable MyCode-AI features |
-| `mycode-ai.provider` | string | "openai" | AI provider (openai/anthropic/google/local) |
-| `mycode-ai.apiKey` | string | "" | API key for selected provider |
-| `mycode-ai.model` | string | "gpt-4" | Model to use |
+```bash
+npm install
+npm run compile
+```
+
+Then set your API key in VS Code settings:
+
+```json
+{
+  "mycode-ai.apiKey": "sk-your-key",
+  "mycode-ai.provider": "openai",
+  "mycode-ai.model": "gpt-4o"
+}
+```
+
+## Commands (30+)
+
+Right-click selected code → Generate / Explain / Review / Refactor.
+Or use `Cmd/Ctrl+Shift+P` → "MyCode AI: ..."
+
+## Architecture
+
+```
+src/
+├── extension.ts          # Entry point
+├── types.ts / aiService.ts
+├── chat/provider.ts      # AI Chat webview
+├── agent/provider.ts     # AI Agent webview
+├── completion/provider.ts
+├── review/commands.ts
+├── debug/commands.ts
+├── git/provider.ts
+├── lsp/commands.ts
+├── task/commands.ts
+└── search/commands.ts
+```
+
+## License
+
+MIT
