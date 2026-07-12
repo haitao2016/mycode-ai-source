@@ -1,70 +1,98 @@
 {
   "name": "mycode-ai",
+  "displayName": "MyCode AI",
+  "description": "AI-powered coding assistant — unified VS Code extension: chat, agent, completion, review, debug, git, LSP & tasks",
   "version": "1.0.0",
-  "description": "MyCode AI - Integrated AI Development Environment",
-  "main": "out/main/index.js",
-  "allowScripts": {
-    "electron@28.3.3": true,
-    "esbuild@0.21.5": true
+  "publisher": "mycode-ai",
+  "icon": "icon.png",
+  "repository": { "type": "git", "url": "https://github.com/haitao2016/mycode-ai-source.git" },
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Machine Learning","Programming Languages","Snippets","Debuggers","Testing","Other"],
+  "keywords": ["ai","copilot","code-generation","assistant","chat","agent","debug","review"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [{"id":"mycode-ai-sidebar","title":"MyCode AI","icon":"$(hubot)"}]
+    },
+    "views": {
+      "mycode-ai-sidebar": [
+        {"id":"mycode-ai.chatView","name":"AI Chat","type":"webview","when":"mycode-ai.enabled"},
+        {"id":"mycode-ai.agentView","name":"Agent","type":"webview","when":"mycode-ai.enabled"},
+        {"id":"mycode-ai.gitView","name":"Git Control","type":"webview","when":"mycode-ai.enabled"}
+      ]
+    },
+    "commands": [
+      {"command":"mycode-ai.openChat","title":"MyCode AI: Open Chat","icon":"$(comment-discussion)"},
+      {"command":"mycode-ai.openAgent","title":"MyCode AI: Open Agent","icon":"$(robot)"},
+      {"command":"mycode-ai.generateCode","title":"MyCode AI: Generate Code","icon":"$(sparkle)"},
+      {"command":"mycode-ai.reviewCode","title":"MyCode AI: Review Code","icon":"$(eye)"},
+      {"command":"mycode-ai.explainCode","title":"MyCode AI: Explain Code","icon":"$(book)"},
+      {"command":"mycode-ai.reviewFile","title":"MyCode AI: Review Current File"},
+      {"command":"mycode-ai.reviewWorkspace","title":"MyCode AI: Review Workspace"},
+      {"command":"mycode-ai.generateDoc","title":"MyCode AI: Generate Documentation"},
+      {"command":"mycode-ai.refactor","title":"MyCode AI: Refactor Code"},
+      {"command":"mycode-ai.agentStart","title":"MyCode AI: Start Agent"},
+      {"command":"mycode-ai.agentStop","title":"MyCode AI: Stop Agent"},
+      {"command":"mycode-ai.agentRun","title":"MyCode AI: Run Agent Task"},
+      {"command":"mycode-ai.completionToggle","title":"MyCode AI: Toggle AI Completion"},
+      {"command":"mycode-ai.debugStart","title":"MyCode AI: Start Debug"},
+      {"command":"mycode-ai.debugAnalyzeError","title":"MyCode AI: Analyze Error"},
+      {"command":"mycode-ai.debugAiAssist","title":"MyCode AI: AI Debug Assistant"},
+      {"command":"mycode-ai.gitStatus","title":"MyCode AI: Git Status"},
+      {"command":"mycode-ai.gitCommit","title":"MyCode AI: Git Commit"},
+      {"command":"mycode-ai.gitPush","title":"MyCode AI: Git Push"},
+      {"command":"mycode-ai.gitPull","title":"MyCode AI: Git Pull"},
+      {"command":"mycode-ai.lspRestart","title":"MyCode AI: Restart Language Servers"},
+      {"command":"mycode-ai.lspStatus","title":"MyCode AI: LSP Status"},
+      {"command":"mycode-ai.tasksBuild","title":"MyCode AI: Build Project"},
+      {"command":"mycode-ai.tasksTest","title":"MyCode AI: Run Tests"},
+      {"command":"mycode-ai.tasksClean","title":"MyCode AI: Clean Build"},
+      {"command":"mycode-ai.toggle","title":"MyCode AI: Toggle On/Off"},
+      {"command":"mycode-ai.searchGlobal","title":"MyCode AI: Global Search"},
+      {"command":"mycode-ai.searchSymbol","title":"MyCode AI: Symbol Search"},
+      {"command":"mycode-ai.searchFile","title":"MyCode AI: File Search"},
+      {"command":"mycode-ai.chatClear","title":"MyCode AI: Clear Chat"}
+    ],
+    "menus": {
+      "editor/context": [
+        {"command":"mycode-ai.generateCode","when":"editorHasSelection && mycode-ai.enabled","group":"mycode-ai@1"},
+        {"command":"mycode-ai.explainCode","when":"editorHasSelection && mycode-ai.enabled","group":"mycode-ai@2"},
+        {"command":"mycode-ai.reviewCode","when":"editorHasSelection && mycode-ai.enabled","group":"mycode-ai@3"},
+        {"command":"mycode-ai.refactor","when":"editorHasSelection && mycode-ai.enabled","group":"mycode-ai@4"}
+      ]
+    },
+    "configuration": {
+      "title":"MyCode AI",
+      "properties": {
+        "mycode-ai.enabled":{"type":"boolean","default":true,"description":"Enable MyCode AI"},
+        "mycode-ai.provider":{"type":"string","default":"openai","enum":["openai","anthropic","google","local"],"description":"AI provider"},
+        "mycode-ai.apiKey":{"type":"string","default":"","description":"API key"},
+        "mycode-ai.model":{"type":"string","default":"gpt-4o","description":"Model"},
+        "mycode-ai.completion.enabled":{"type":"boolean","default":true},
+        "mycode-ai.completion.minPrefixLength":{"type":"number","default":2},
+        "mycode-ai.completion.maxSuggestions":{"type":"number","default":5},
+        "mycode-ai.completion.responseDelay":{"type":"number","default":500},
+        "mycode-ai.agent.maxIterations":{"type":"number","default":50},
+        "mycode-ai.review.checkStyle":{"type":"boolean","default":true},
+        "mycode-ai.review.checkPerformance":{"type":"boolean","default":true},
+        "mycode-ai.review.checkSecurity":{"type":"boolean","default":true},
+        "mycode-ai.review.checkBestPractices":{"type":"boolean","default":true},
+        "mycode-ai.debug.autoAnalyzeErrors":{"type":"boolean","default":false},
+        "mycode-ai.tasks.autoOpenOutput":{"type":"boolean","default":true},
+        "mycode-ai.tasks.showNotifications":{"type":"boolean","default":true}
+      }
+    }
   },
   "scripts": {
-    "dev": "electron-vite dev",
-    "build": "electron-vite build",
-    "preview": "electron-vite preview",
-    "compile": "tsc -p ./",
-    "watch": "tsc -p ./ --watch",
-    "build:core": "cd extensions/mycode-ai-core && npm run compile",
-    "build:all": "node scripts/build-all.js",
-    "inject": "node scripts/inject-into-code-oss.js"
+    "vscode:prepublish":"npm run compile",
+    "compile":"tsc -p ./",
+    "watch":"tsc -watch -p ./",
+    "package":"vsce package"
   },
   "devDependencies": {
-    "@types/decompress": "^4.2.7",
-    "@types/lodash": "^4.14.0",
-    "@types/node": "^20.0.0",
-    "@types/node-fetch": "^2.6.0",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "@types/react-router-dom": "^5.3.3",
-    "@types/semver": "^7.5.0",
-    "@types/unzipper": "^0.10.10",
-    "@types/uuid": "^9.0.0",
-    "@types/vscode": "^1.85.0",
-    "@types/ws": "^8.5.0",
-    "@typescript-eslint/eslint-plugin": "^8.62.1",
-    "@typescript-eslint/parser": "^8.62.1",
-    "@vitejs/plugin-react": "^4.0.0",
-    "autoprefixer": "^10.4.0",
-    "electron": "^28.3.3",
-    "electron-devtools-installer": "^3.2.0",
-    "electron-vite": "^2.0.0",
-    "eslint": "^9.39.4",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.6",
-    "postcss": "^8.4.0",
-    "prettier": "^3.9.4",
-    "rollup-plugin-copy": "^3.5.0",
-    "tailwindcss": "^3.4.0",
-    "typescript": "^5.4.0",
-    "vite": "^5.0.0"
-  },
-  "dependencies": {
-    "@monaco-editor/react": "^4.6.0",
-    "decompress": "^4.2.1",
-    "diff": "^5.1.0",
-    "lodash": "^4.17.0",
-    "lucide-react": "^1.23.0",
-    "marked": "^11.0.0",
-    "monaco-editor": "^0.45.0",
-    "node-fetch": "^2.7.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-icons": "^5.0.0",
-    "semver": "^7.5.0",
-    "unzipper": "^0.10.0",
-    "uuid": "^9.0.0",
-    "ws": "^8.14.0",
-    "y-protocols": "^1.0.0",
-    "yjs": "^13.6.0",
-    "zustand": "^4.5.0"
+    "@types/node":"^20.0.0",
+    "@types/vscode":"^1.85.0",
+    "typescript":"^5.4.0"
   }
 }
