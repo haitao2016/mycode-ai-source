@@ -1,79 +1,65 @@
+/*---------------------------------------------------------------------------------------------
+ *  MyCode AI — Main Entry Point
+ *  Modeled after VS Code's src/vs/workbench/workbench.common.main.ts
+ *  Architecture: base → platform → workbench/contrib
+ *--------------------------------------------------------------------------------------------*/
+
 import * as vscode from 'vscode';
-import { ChatViewProvider } from './chat/provider';
-import { AgentViewProvider } from './agent/provider';
-import { CompletionProvider } from './completion/provider';
-import { ReviewCommands } from './review/commands';
-import { DebugCommands } from './debug/commands';
-import { GitViewProvider, GitCommands } from './git/provider';
-import { LspCommands } from './lsp/commands';
-import { TaskCommands } from './task/commands';
-import { SearchCommands } from './search/commands';
+import { DisposableStore } from './base/common/lifecycle';
 
-let chatProvider: ChatViewProvider;
-let agentProvider: AgentViewProvider;
-let gitProvider: GitViewProvider;
+// --- Workbench Contribs ---
+import { ChatContribution } from './workbench/contrib/chat/chat.contribution';
+import { AgentContribution } from './workbench/contrib/agent/agent.contribution';
+import { CompletionContribution } from './workbench/contrib/completion/completion.contribution';
+import { ReviewContribution } from './workbench/contrib/review/review.contribution';
+import { DebugContribution } from './workbench/contrib/debug/debug.contribution';
+import { GitContribution } from './workbench/contrib/git/git.contribution';
+import { LspContribution } from './workbench/contrib/lsp/lsp.contribution';
+import { TaskContribution } from './workbench/contrib/tasks/task.contribution';
+import { SearchContribution } from './workbench/contrib/search/search.contribution';
 
-export function activate(context: vscode.ExtensionContext) {
+// --- Workbench common ---
+import { IWorkbenchContribution } from './workbench/common';
+
+/**
+ * All contributions are registered here — exactly like
+ * VS Code's workbench.common.main.ts and workbench.desktop.main.ts
+ */
+const CONTRIBUTIONS: Array<new () => IWorkbenchContribution> = [
+  ChatContribution,
+  AgentContribution,
+  CompletionContribution,
+  ReviewContribution,
+  DebugContribution,
+  GitContribution,
+  LspContribution,
+  TaskContribution,
+  SearchContribution,
+];
+
+let _globalStore: DisposableStore;
+
+export async function activate(context: vscode.ExtensionContext) {
   const config = vscode.workspace.getConfiguration('mycode-ai');
   const isEnabled = config.get<boolean>('enabled', true);
   vscode.commands.executeCommand('setContext', 'mycode-ai.enabled', isEnabled);
 
-  // Chat
-  chatProvider = new ChatViewProvider(context.extensionUri);
-  context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider('mycode-ai.chatView', chatProvider, {
-      webviewOptions: { retainContextWhenHidden: true }
-    })
-  );
-  context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.openChat', () =>
-    vscode.commands.executeCommand('mycode-ai.chatView.focus')));
-  context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.chatClear', () => chatProvider.clear()));
-  context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.generateCode', () => handleAICommand('generateCode')));
-  context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.explainCode', () => handleAICommand('explainCode')));
-  context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.reviewCode', () => handleAICommand('reviewCode')));
+  _globalStore = new DisposableStore();
 
-  // Agent
-  agentProvider = new AgentViewProvider(context.extensionUri);
-  context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider('mycode-ai.agentView', agentProvider, {
-      webviewOptions: { retainContextWhenHidden: true }
-    })
-  );
-  context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.openAgent', () =>
-    vscode.commands.executeCommand('mycode-ai.agentView.focus')));
-  context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.agentStart', () => agentProvider.start()));
-  context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.agentStop', () => agentProvider.stop()));
-  context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.agentRun', () => agentProvider.runTask()));
+  // Activate every contribution (VS Code pattern: forEach → activate)
+  for (const Ctor of CONTRIBUTIONS) {
+    const contrib = new Ctor();
+    const store = new DisposableStore();
+    try {
+      await contrib.activate(store);
+    } catch (e) {
+      console.error(`Failed to activate contribution: ${Ctor.name}`, e);
+    }
+    _globalStore.add(store);
+  }
 
-  // Completion
-  new CompletionProvider().register(context);
-
-  // Review
-  new ReviewCommands().register(context);
-
-  // Debug
-  new DebugCommands().register(context);
-
-  // Git
-  gitProvider = new GitViewProvider(context.extensionUri);
-  context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider('mycode-ai.gitView', gitProvider, {
-      webviewOptions: { retainContextWhenHidden: true }
-    })
-  );
-  GitCommands.register(context);
-
-  // LSP
-  new LspCommands().register(context);
-
-  // Tasks
-  new TaskCommands().register(context);
-
-  // Search
-  new SearchCommands().register(context);
-
-  // Toggle
-  context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.toggle', async () => {
+  // Toggle command
+  _globalStore.add(vscode.commands.registerCommand('mycode-ai.toggle', async () => {
     const cfg = vscode.workspace.getConfiguration('mycode-ai');
     const cur = cfg.get<boolean>('enabled', true);
     await cfg.update('enabled', !cur, true);
@@ -86,20 +72,15 @@ export function activate(context: vscode.ExtensionContext) {
   sb.text = '$(hubot) MyCode AI';
   sb.tooltip = 'MyCode AI is active';
   sb.show();
-  context.subscriptions.push(sb);
+  _globalStore.add(sb);
 
-  console.log('MyCode AI extension activated');
-}
+  // Push everything to VS Code's subscription lifecycle
+  context.subscriptions.push(_globalStore);
 
-async function handleAICommand(type: string) {
-  const editor = vscode.window.activeTextEditor;
-  if (!editor) { vscode.window.showWarningMessage('No active editor'); return; }
-  const sel = editor.document.getText(editor.selection);
-  if (!sel) { vscode.window.showWarningMessage('Please select some code first'); return; }
-  chatProvider.handleCodeAction(type, sel, editor.document.languageId);
-  await vscode.commands.executeCommand('mycode-ai.chatView.focus');
+  console.log('MyCode AI extension activated with ' + CONTRIBUTIONS.length + ' contributions');
 }
 
 export function deactivate() {
+  _globalStore?.dispose();
   console.log('MyCode AI extension deactivated');
 }
