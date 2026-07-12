@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { AIMessage, AIResponse, AIConfig } from './types';
+import { AIMessage, AIResponse, AIConfig } from '../types';
 
 function getConfig(): AIConfig {
   const c = vscode.workspace.getConfiguration('mycode-ai');
@@ -14,10 +14,10 @@ function getConfig(): AIConfig {
 
 export async function sendMessage(messages: AIMessage[]): Promise<AIResponse> {
   const config = getConfig();
-  if (!config.apiKey) return { success: false, error: 'API key not configured' };
+  if (!config.apiKey) return { success: false, error: 'API key not configured. Set mycode-ai.apiKey in Settings.' };
   try {
     if (config.provider === 'openai') return await callOpenAI(config, messages);
-    return { success: false, error: `Provider ${config.provider} not yet implemented` };
+    return { success: false, error: `Provider ${config.provider} is not yet implemented.` };
   } catch (e) {
     return { success: false, error: String(e) };
   }
@@ -29,7 +29,10 @@ async function callOpenAI(config: AIConfig, messages: AIMessage[]): Promise<AIRe
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${config.apiKey}` },
     body: JSON.stringify({ model: config.model, messages, temperature: config.temperature, max_tokens: config.maxTokens }),
   });
-  if (!res.ok) return { success: false, error: await res.text() };
+  if (!res.ok) {
+    const err = await res.text();
+    return { success: false, error: `OpenAI API error: ${err}` };
+  }
   const data = await res.json() as { choices?: Array<{ message?: { content?: string } }> };
   return { success: true, message: data.choices?.[0]?.message?.content ?? '' };
 }
@@ -50,7 +53,7 @@ export async function explainCode(code: string, language: string): Promise<AIRes
 
 export async function reviewCode(code: string, language: string): Promise<AIResponse> {
   return sendMessage([
-    { role: 'system', content: `Review the following ${language} code for best practices, bugs, and improvements.` },
+    { role: 'system', content: `Review the following ${language} code for best practices, potential bugs, and improvements.` },
     { role: 'user', content: code },
   ]);
 }
