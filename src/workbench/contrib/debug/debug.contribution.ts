@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { DisposableStore, IWorkbenchContribution } from '../../common';
+import { DisposableStore, IWorkbenchContribution } from '../common';
 
 export class DebugContribution implements IWorkbenchContribution {
   activate(store: DisposableStore): void {
@@ -19,7 +19,16 @@ export class DebugContribution implements IWorkbenchContribution {
     const apiKey = vscode.workspace.getConfiguration('mycode-ai').get<string>('apiKey', '');
     if (!apiKey) { vscode.window.showErrorMessage('API key not configured'); return; }
     const diags = vscode.languages.getDiagnostics();
-    let text = ''; diags.forEach(items => items.forEach(d => { text += (d as { message: string }).message + '\n'; }));
+    let text = '';
+    diags.forEach((items) => {
+      if (Array.isArray(items)) {
+        items.forEach(d => {
+          if (d && typeof (d as vscode.Diagnostic).message === 'string') {
+            text += (d as vscode.Diagnostic).message + '\n';
+          }
+        });
+      }
+    });
     if (!text) { vscode.window.showInformationMessage('No errors'); return; }
     await vscode.window.withProgress({ location: vscode.ProgressLocation.Window, title: 'Analyzing...' }, async () => {
       try {
