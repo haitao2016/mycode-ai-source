@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { AIMessage, AIResponse, AIConfig } from '../types';
+import { AIMessage, AIResponse, AIConfig } from './types';
 
 function getConfig(): AIConfig {
   const c = vscode.workspace.getConfiguration('mycode-ai');
