@@ -18,27 +18,21 @@ export function activate(context: vscode.ExtensionContext) {
   const isEnabled = config.get<boolean>('enabled', true);
   vscode.commands.executeCommand('setContext', 'mycode-ai.enabled', isEnabled);
 
-  // --- Chat ---
+  // Chat
   chatProvider = new ChatViewProvider(context.extensionUri);
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider('mycode-ai.chatView', chatProvider, {
       webviewOptions: { retainContextWhenHidden: true }
     })
   );
-  context.subscriptions.push(
-    vscode.commands.registerCommand('mycode-ai.openChat', () =>
-      vscode.commands.executeCommand('mycode-ai.chatView.focus'))
-  );
-  context.subscriptions.push(
-    vscode.commands.registerCommand('mycode-ai.chatClear', () => chatProvider.clear()));
-  context.subscriptions.push(
-    vscode.commands.registerCommand('mycode-ai.generateCode', () => handleAICommand('generateCode')));
-  context.subscriptions.push(
-    vscode.commands.registerCommand('mycode-ai.explainCode', () => handleAICommand('explainCode')));
-  context.subscriptions.push(
-    vscode.commands.registerCommand('mycode-ai.reviewCode', () => handleAICommand('reviewCode')));
+  context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.openChat', () =>
+    vscode.commands.executeCommand('mycode-ai.chatView.focus')));
+  context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.chatClear', () => chatProvider.clear()));
+  context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.generateCode', () => handleAICommand('generateCode')));
+  context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.explainCode', () => handleAICommand('explainCode')));
+  context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.reviewCode', () => handleAICommand('reviewCode')));
 
-  // --- Agent ---
+  // Agent
   agentProvider = new AgentViewProvider(context.extensionUri);
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider('mycode-ai.agentView', agentProvider, {
@@ -51,16 +45,16 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.agentStop', () => agentProvider.stop()));
   context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.agentRun', () => agentProvider.runTask()));
 
-  // --- Completion ---
+  // Completion
   new CompletionProvider().register(context);
 
-  // --- Review ---
+  // Review
   new ReviewCommands().register(context);
 
-  // --- Debug ---
+  // Debug
   new DebugCommands().register(context);
 
-  // --- Git ---
+  // Git
   gitProvider = new GitViewProvider(context.extensionUri);
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider('mycode-ai.gitView', gitProvider, {
@@ -69,16 +63,16 @@ export function activate(context: vscode.ExtensionContext) {
   );
   GitCommands.register(context);
 
-  // --- LSP ---
+  // LSP
   new LspCommands().register(context);
 
-  // --- Tasks ---
+  // Tasks
   new TaskCommands().register(context);
 
-  // --- Search ---
+  // Search
   new SearchCommands().register(context);
 
-  // --- Toggle ---
+  // Toggle
   context.subscriptions.push(vscode.commands.registerCommand('mycode-ai.toggle', async () => {
     const cfg = vscode.workspace.getConfiguration('mycode-ai');
     const cur = cfg.get<boolean>('enabled', true);
@@ -87,7 +81,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage(`MyCode AI ${!cur ? 'enabled' : 'disabled'}`);
   }));
 
-  // --- Status bar ---
+  // Status bar
   const sb = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
   sb.text = '$(hubot) MyCode AI';
   sb.tooltip = 'MyCode AI is active';
