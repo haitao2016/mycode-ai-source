@@ -18,23 +18,18 @@ import { LspContribution } from './workbench/contrib/lsp/lsp.contribution';
 import { TaskContribution } from './workbench/contrib/tasks/task.contribution';
 import { SearchContribution } from './workbench/contrib/search/search.contribution';
 
+// --- Platform Services ---
+import { ToolsService, getToolsService } from './platform/tools/toolsService';
+import { MCPService, getMCPService } from './platform/mcp/mcpService';
+
 // --- Workbench common ---
 import { IWorkbenchContribution } from './workbench/common';
+import { ToolCall } from './shared/types';
 
-/**
- * All contributions are registered here — exactly like
- * VS Code's workbench.common.main.ts and workbench.desktop.main.ts
- */
 const CONTRIBUTIONS: Array<new () => IWorkbenchContribution> = [
-  ChatContribution,
-  AgentContribution,
-  CompletionContribution,
-  ReviewContribution,
-  DebugContribution,
-  GitContribution,
-  LspContribution,
-  TaskContribution,
-  SearchContribution,
+  ChatContribution, AgentContribution, CompletionContribution,
+  ReviewContribution, DebugContribution, GitContribution,
+  LspContribution, TaskContribution, SearchContribution,
 ];
 
 let _globalStore: DisposableStore;
@@ -46,7 +41,23 @@ export async function activate(context: vscode.ExtensionContext) {
 
   _globalStore = new DisposableStore();
 
-  // Activate every contribution (VS Code pattern: forEach → activate)
+  // --- Initialize platform services (singletons) ---
+  const toolsService = getToolsService();
+  _globalStore.add({ dispose: () => toolsService.dispose() });
+
+  const mcpService = getMCPService();
+  _globalStore.add({ dispose: () => mcpService.dispose() });
+
+  // Wire MCP tools into the ToolsService
+  mcpService._onDidDiscoverTools((serverName: string, tools: any[]) => {
+    for (const tool of tools) {
+      toolsService.registerMCPTool(serverName, tool);
+    }
+  });
+
+  console.log('MyCode AI: platform services initialized (ToolsService + MCPService)');
+
+  // --- Activate workbench contributions ---
   for (const Ctor of CONTRIBUTIONS) {
     const contrib = new Ctor();
     const store = new DisposableStore();
@@ -58,7 +69,7 @@ export async function activate(context: vscode.ExtensionContext) {
     _globalStore.add(store);
   }
 
-  // Toggle command
+  // --- Commands ---
   _globalStore.add(vscode.commands.registerCommand('mycode-ai.toggle', async () => {
     const cfg = vscode.workspace.getConfiguration('mycode-ai');
     const cur = cfg.get<boolean>('enabled', true);
@@ -67,14 +78,30 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage(`MyCode AI ${!cur ? 'enabled' : 'disabled'}`);
   }));
 
-  // Status bar
+  _globalStore.add(vscode.commands.registerCommand('mycode-ai.executeTool',
+    async (call: ToolCall) => {
+      return toolsService.executeTool(call);
+    }
+  ));
+
+  _globalStore.add(vscode.commands.registerCommand('mycode-ai.mcpStartServer',
+    async (serverName: string) => {
+      await mcpService.startServer(serverName);
+    }
+  ));
+  _globalStore.add(vscode.commands.registerCommand('mycode-ai.mcpStopServer',
+    async (serverName: string) => {
+      mcpService.stopServer(serverName);
+    }
+  ));
+
+  // --- Status bar ---
   const sb = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
   sb.text = '$(hubot) MyCode AI';
   sb.tooltip = 'MyCode AI is active';
   sb.show();
   _globalStore.add(sb);
 
-  // Push everything to VS Code's subscription lifecycle
   context.subscriptions.push(_globalStore);
 
   console.log('MyCode AI extension activated with ' + CONTRIBUTIONS.length + ' contributions');
