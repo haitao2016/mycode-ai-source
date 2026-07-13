@@ -215,3 +215,56 @@ export interface AgentTool {
   description: string;
   execute: (...args: unknown[]) => Promise<string>;
 }
+
+// ============================================================
+// Model Capabilities (for modelCapabilities.ts)
+// ============================================================
+
+export interface ModelCapabilities {
+  supportsImages?: boolean;
+  supportsComputerUse?: boolean;
+  supportsPromptCaching?: boolean;
+  maxOutputTokens?: number;
+}
+
+// ============================================================
+// Tool Definition / Call / Result (for toolsService & builtinTools)
+// ============================================================
+
+export interface ToolDefinition {
+  name: string;
+  description: string;
+  params: Record<string, { type: string; description: string; required?: boolean }>;
+  execute: (params: Record<string, unknown>) => Promise<string>;
+  approvalType?: ToolApprovalType;
+}
+
+export interface ToolCall {
+  toolName: string;
+  params: Record<string, unknown>;
+  id?: string;
+}
+
+export interface ToolResult {
+  toolName: string;
+  result: string;
+  error?: string;
+  id?: string;
+}
+
+// Re-export aliases for case-insensitive imports
+export type McpServer = MCPServer;
+export type McpTool = MCPTool;
+export type McpConfig = MCPConfigFileJSON;
+export type McpConfigEntry = MCPConfigFileEntryJSON;
+
+// ============================================================
+// Chat Context (for agent/chat contributions)
+// ============================================================
+
+export interface ChatContext {
+  workspaceRoot?: string;
+  activeFile?: string;
+  selectedText?: string;
+  language?: string;
+}
