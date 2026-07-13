@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { AgentTask } from '../types';
+import { AgentTask } from '../shared/types';
 
 export class AgentViewProvider implements vscode.WebviewViewProvider {
   private _view?: vscode.WebviewView;
@@ -50,7 +50,7 @@ export class AgentViewProvider implements vscode.WebviewViewProvider {
           const res = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
-            body: JSON.stringify({ model: config.get('model', 'gpt-4o'), messages: [{ role: 'system', content: 'You are an AI coding agent. Suggest next action.' }, { role: 'user', content: `Task: ${description}\nProgress: ${task.steps.map(s => `- ${s.action}: ${s.result}`).join('\n')}` }], temperature: 0.7, max_tokens: 400 }),
+            body: JSON.stringify({ model: config.get('model', 'gpt-4o'), messages: [{ role: 'system', content: 'You are an AI coding agent. Suggest next action.' }, { role: 'user', content: `Task: ${description}\nProgress: ${task.steps.map((s: { action: string; result: string }) => `- ${s.action}: ${s.result}`).join('\n')}` }], temperature: 0.7, max_tokens: 400 }),
           });
           const data = await res.json() as { choices?: Array<{ message?: { content?: string } }> };
           const content = data.choices?.[0]?.message?.content ?? 'No response';
@@ -103,7 +103,7 @@ export class AgentViewProvider implements vscode.WebviewViewProvider {
 <script>
 const v=acquireVsCodeApi();let running=false;
 function setStatus(s){running=s==='running';document.getElementById('status').className='status '+s;document.getElementById('status').textContent=s.charAt(0).toUpperCase()+s.slice(1);document.getElementById('startBtn').disabled=running;document.getElementById('stopBtn').disabled=!running;document.getElementById('runBtn').disabled=!running}
-function renderTask(t){let steps='';t.steps.forEach(s=>{steps+='<div class="step"><span class="step-action">'+s.action+':</span> '+s.result+'</div>'});const el=document.getElementById('task-'+t.id);if(el){el.className='task '+t.status;el.innerHTML='<div class="task-header"><span class="task-desc">'+t.description+'</span><span class="task-status s-'+t.status+'">'+t.status+'</span></div>'+steps}else{document.getElementById('content').innerHTML='<div class="task '+t.status+'" id="task-'+t.id+'"><div class="task-header"><span class="task-desc">'+t.description+'</span><span class="task-status s-'+t.status+'">'+t.status+'</span></div>'+steps+'</div>'}}
+function renderTask(t){let steps='';t.steps.forEach((s: { action: string; result: string }) => {steps+='<div class="step"><span class="step-action">'+s.action+':</span> '+s.result+'</div>'});const el=document.getElementById('task-'+t.id);if(el){el.className='task '+t.status;el.innerHTML='<div class="task-header"><span class="task-desc">'+t.description+'</span><span class="task-status s-'+t.status+'">'+t.status+'</span></div>'+steps}else{document.getElementById('content').innerHTML='<div class="task '+t.status+'" id="task-'+t.id+'"><div class="task-header"><span class="task-desc">'+t.description+'</span><span class="task-status s-'+t.status+'">'+t.status+'</span></div>'+steps+'</div>'}}
 document.getElementById('startBtn').onclick=()=>v.postMessage({type:'start'});document.getElementById('stopBtn').onclick=()=>v.postMessage({type:'stop'});document.getElementById('runBtn').onclick=()=>{v.postMessage({type:'runTask',data:document.getElementById('taskInput').value.trim()});document.getElementById('taskInput').value=''};document.getElementById('taskInput').onkeydown=e=>{if(e.key==='Enter'&&running){e.preventDefault();document.getElementById('runBtn').click()}};
 window.addEventListener('message',e=>{const m=e.data;if(m.type==='status')setStatus(m.data);if(m.type==='taskStarted')renderTask(m.data);if(m.type==='step'){const el=document.getElementById('task-'+m.data.taskId);if(el){const d=document.createElement('div');d.className='step';d.innerHTML='<span class="step-action">'+m.data.step.action+':</span> '+m.data.step.result;el.appendChild(d)}}if(m.type==='taskCompleted')renderTask(m.data)});
 v.postMessage({type:'getTasks'});
