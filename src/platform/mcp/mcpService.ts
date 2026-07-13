@@ -7,8 +7,7 @@ import * as vscode from 'vscode';
 import * as cp from 'child_process';
 import {
   MCPServer, MCPServerStatus, MCPTool, MCPConfigFileJSON,
-  MCPConfigFileEntryJSON, MCPToolCallParams, RawMCPToolCall,
-  ToolDefinition,
+  MCPConfigFileEntryJSON, MCPToolCallParams, ToolDefinition,
 } from '../../shared/types';
 import { getToolsService } from '../tools/toolsService';
 
@@ -16,27 +15,45 @@ import { getToolsService } from '../tools/toolsService';
 // MCPService
 // ============================================================
 
+type ServerEntry = {
+  config: MCPConfigFileEntryJSON;
+  process?: cp.ChildProcess;
+  status: MCPServerStatus;
+  tools: MCPTool[];
+};
+
+type ToolDiscoveryCallback = (serverName: string, tools: MCPTool[]) => void;
+
 export class MCPService {
-  private _servers: Map<string, { config: MCPConfigFileEntryJSON; process?: cp.ChildProcess; status: MCPServerStatus; tools: MCPTool[] }> = new Map();
+  private _servers: Map<string, ServerEntry> = new Map();
   private _disposables: vscode.Disposable[] = [];
+  private _discoveryListeners: ToolDiscoveryCallback[] = [];
 
   constructor() {}
 
+  /** Register a callback for tool discovery — called by extension.ts to wire into ToolsService */
+  _onDidDiscoverTools(cb: ToolDiscoveryCallback): void {
+    this._discoveryListeners.push(cb);
+  }
+
+  private _notifyDiscovery(serverName: string, tools: MCPTool[]): void {
+    for (const cb of this._discoveryListeners) {
+      try { cb(serverName, tools); } catch (e) { /* ignore */ }
+    }
+  }
+
   // --- Config ---
 
-  /** Load MCP config from workspace settings */
   loadConfig(config: MCPConfigFileJSON): void {
     for (const [name, entry] of Object.entries(config.mcpServers)) {
       this._servers.set(name, { config: entry, status: 'offline', tools: [] });
     }
   }
 
-  /** Add a single server from config */
   addServer(name: string, entry: MCPConfigFileEntryJSON): void {
     this._servers.set(name, { config: entry, status: 'offline', tools: [] });
   }
 
-  /** Remove a server */
   removeServer(name: string): void {
     this.stopServer(name);
     this._servers.delete(name);
@@ -45,7 +62,6 @@ export class MCPService {
 
   // --- Lifecycle ---
 
-  /** Start a named MCP server */
   async startServer(name: string): Promise<void> {
     const entry = this._servers.get(name);
     if (!entry) throw new Error(`MCP server not found: ${name}`);
@@ -54,15 +70,12 @@ export class MCPService {
 
     try {
       if (entry.config.url) {
-        // HTTP-based MCP server
         await this._connectHttpServer(name, entry);
       } else if (entry.config.command) {
-        // Process-based MCP server
         await this._spawnProcessServer(name, entry);
       } else {
         throw new Error(`No command or URL configured for ${name}`);
       }
-
       entry.status = 'success';
     } catch (e) {
       entry.status = 'error';
@@ -70,7 +83,6 @@ export class MCPService {
     }
   }
 
-  /** Stop a named MCP server */
   stopServer(name: string): void {
     const entry = this._servers.get(name);
     if (!entry) return;
@@ -83,13 +95,11 @@ export class MCPService {
     getToolsService().unregisterMCPServer(name);
   }
 
-  /** Start all configured servers */
   async startAll(): Promise<void> {
     const names = Array.from(this._servers.keys());
     await Promise.allSettled(names.map(n => this.startServer(n)));
   }
 
-  /** Stop all servers */
   stopAll(): void {
     for (const name of this._servers.keys()) {
       this.stopServer(name);
@@ -98,12 +108,10 @@ export class MCPService {
 
   // --- Tool Discovery ---
 
-  /** Get all MCP tools from a server */
   getServerTools(name: string): MCPTool[] {
     return this._servers.get(name)?.tools ?? [];
   }
 
-  /** Get all tools across all servers */
   getAllMCPTools(): MCPTool[] {
     const all: MCPTool[] = [];
     for (const [, entry] of this._servers) {
@@ -114,7 +122,6 @@ export class MCPService {
 
   // --- Tool Execution ---
 
-  /** Execute an MCP tool and return its result */
   async executeTool(params: MCPToolCallParams): Promise<string> {
     const entry = this._servers.get(params.serverName);
     if (!entry || entry.status !== 'success') {
@@ -130,7 +137,6 @@ export class MCPService {
 
   // --- Status ---
 
-  /** Get status snapshot for all servers */
   getServerStatuses(): MCPServer[] {
     return Array.from(this._servers.entries()).map(([name, entry]) => ({
       status: entry.status,
@@ -141,8 +147,7 @@ export class MCPService {
 
   // --- Internal ---
 
-  private async _connectHttpServer(name: string, entry: { config: MCPConfigFileEntryJSON; status: MCPServerStatus; tools: MCPTool[] }): Promise<void> {
-    // Simplified: fetch tools list from HTTP endpoint
+  private async _connectHttpServer(name: string, entry: ServerEntry): Promise<void> {
     const url = entry.config.url!;
     try {
       const resp = await fetch(`${url}/tools/list`, {
@@ -152,13 +157,14 @@ export class MCPService {
         const data = await resp.json() as { tools: MCPTool[] };
         entry.tools = data.tools || [];
         this._registerTools(name, entry.tools);
+        this._notifyDiscovery(name, entry.tools);
       }
     } catch (e) {
       throw new Error(`HTTP MCP server ${name} unreachable: ${e}`);
     }
   }
 
-  private async _spawnProcessServer(name: string, entry: { config: MCPConfigFileEntryJSON; process?: cp.ChildProcess; status: MCPServerStatus; tools: MCPTool[] }): Promise<void> {
+  private async _spawnProcessServer(name: string, entry: ServerEntry): Promise<void> {
     const { command, args, env } = entry.config;
     const proc = cp.spawn(command!, args || [], {
       env: { ...process.env, ...(env || {}) },
@@ -177,7 +183,6 @@ export class MCPService {
 
       proc.stdout?.on('data', (chunk: Buffer) => {
         buffer += chunk.toString();
-        // Parse JSON-RPC messages
         const lines = buffer.split('\n');
         buffer = lines.pop() || '';
         for (const line of lines) {
@@ -186,10 +191,11 @@ export class MCPService {
             if (msg.result?.tools) {
               entry.tools = msg.result.tools;
               this._registerTools(name, entry.tools);
+              this._notifyDiscovery(name, entry.tools);
               clearTimeout(timeout);
               resolve();
             }
-          } catch { /* partial JSON, continue */ }
+          } catch { /* partial JSON */ }
         }
       });
 
@@ -208,21 +214,14 @@ export class MCPService {
         }
       });
 
-      // Send initialize request
       const initMsg = JSON.stringify({
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'initialize',
+        jsonrpc: '2.0', id: 1, method: 'initialize',
         params: { protocolVersion: '2024-11-05', capabilities: {} },
       });
       proc.stdin?.write(initMsg + '\n');
 
-      // Request tools list
       const toolsMsg = JSON.stringify({
-        jsonrpc: '2.0',
-        id: 2,
-        method: 'tools/list',
-        params: {},
+        jsonrpc: '2.0', id: 2, method: 'tools/list', params: {},
       });
       proc.stdin?.write(toolsMsg + '\n');
     });
@@ -234,9 +233,7 @@ export class MCPService {
 
     return new Promise((resolve, reject) => {
       const callMsg = JSON.stringify({
-        jsonrpc: '2.0',
-        id: Date.now(),
-        method: 'tools/call',
+        jsonrpc: '2.0', id: Date.now(), method: 'tools/call',
         params: { name: params.toolName, arguments: params.params },
       });
 
@@ -272,11 +269,12 @@ export class MCPService {
   private _registerTools(serverName: string, tools: MCPTool[]): void {
     const ts = getToolsService();
     for (const tool of tools) {
+      const schemaProps = (tool.inputSchema as any)?.properties || {};
       const def: ToolDefinition = {
         name: `mcp:${serverName}:${tool.name}`,
         description: tool.description || `MCP tool: ${tool.name}`,
         params: Object.fromEntries(
-          Object.entries(tool.inputSchema?.properties || {}).map(([k, v]: [string, any]) => [
+          Object.entries(schemaProps).map(([k, v]: [string, any]) => [
             k,
             { type: v.type || 'string', description: v.description || '' },
           ])
@@ -292,6 +290,7 @@ export class MCPService {
 
   dispose(): void {
     this.stopAll();
+    this._discoveryListeners.length = 0;
     this._disposables.forEach(d => d.dispose());
   }
 }
