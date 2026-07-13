@@ -18,15 +18,8 @@
     "node_modules",
     "out",
     "extensions",
-    "extensions/**",
     "src/renderer",
-    "src/renderer/**",
     "src/main",
-    "src/main/**",
-    "src/preload",
-    "src/preload/**",
-    "src/shared",
-    "src/shared/**",
-    "src/types"
+    "src/preload"
   ]
 }
