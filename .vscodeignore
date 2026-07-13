@@ -1,11 +1,8 @@
 .vscode/**
-.vscode-test/**
+.gitignore
 src/**
 node_modules/**
 out/**
-.gitignore
 **/*.ts
-!out/**/*.js
-electron.vite.config.js
-postcss.config.js
-tailwind.config.js
+**/tsconfig.json
+.git
