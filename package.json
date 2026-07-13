@@ -4,7 +4,7 @@
   "description": "AI-powered coding assistant — unified VS Code extension: chat, agent, completion, review, debug, git, LSP & tasks",
   "version": "1.0.0",
   "publisher": "mycode-ai",
-  "icon": "icon.png",
+  "icon": "icon.svg",
   "repository": { "type": "git", "url": "https://github.com/haitao2016/mycode-ai-source.git" },
   "engines": { "vscode": "^1.85.0" },
   "categories": ["Machine Learning","Programming Languages","Snippets","Debuggers","Testing","Other"],
