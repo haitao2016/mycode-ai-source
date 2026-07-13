@@ -4,8 +4,8 @@
  *--------------------------------------------------------------------------------------------*/
 
 import * as vscode from 'vscode';
-import { ToolDefinition, ToolCall, ToolResult, InternalToolInfo, BuiltinToolName } from '../../shared/types';
-import { allBuiltinTools, builtinToolsByName } from './builtinTools';
+import { ToolDefinition, ToolCall, ToolResult, InternalToolInfo } from '../../shared/types';
+import { allBuiltinTools } from './builtinTools';
 
 // ============================================================
 // ToolsService
@@ -16,7 +16,6 @@ export class ToolsService {
   private _mcpTools: Map<string, ToolDefinition> = new Map();
 
   constructor() {
-    // Register all built-in tools
     for (const t of allBuiltinTools) {
       this._tools.set(t.name, t);
     }
@@ -24,14 +23,12 @@ export class ToolsService {
 
   // --- Registration ---
 
-  /** Register an MCP tool (from an MCP server) */
   registerMCPTool(serverName: string, tool: ToolDefinition): void {
     const key = `mcp:${serverName}:${tool.name}`;
     this._mcpTools.set(key, tool);
     this._tools.set(key, tool);
   }
 
-  /** Unregister all MCP tools from a server */
   unregisterMCPServer(serverName: string): void {
     const prefix = `mcp:${serverName}:`;
     for (const key of this._tools.keys()) {
@@ -60,7 +57,6 @@ export class ToolsService {
     return Array.from(this._mcpTools.values());
   }
 
-  /** Get tool info for AI prompts */
   getToolInfoForPrompt(): InternalToolInfo[] {
     return this.getAllTools().map(t => ({
       name: t.name,
@@ -79,7 +75,6 @@ export class ToolsService {
       return { toolName: call.toolName, result: '', error: `Unknown tool: ${call.toolName}` };
     }
 
-    // Check approval
     if (tool.approvalType) {
       const approved = await this._requestApproval(tool, call.params);
       if (!approved) {
@@ -128,6 +123,11 @@ export class ToolsService {
     }
 
     return choice === 'Approve';
+  }
+
+  dispose(): void {
+    this._tools.clear();
+    this._mcpTools.clear();
   }
 }
 
