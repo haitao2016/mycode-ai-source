@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ReviewIssue } from '../types';
+import { ReviewIssue } from '../shared/types';
 
 export class ReviewCommands {
   public register(context: vscode.ExtensionContext) {
